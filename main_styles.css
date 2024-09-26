@@ -1,0 +1,12 @@
+body {
+	margin: 0px;
+	padding: 0px;
+}
+.title-bar {
+	text-align: center;
+	font-family: "a로케트", sans-serif;
+	font-size: 50px;
+	background-color: #ddd;
+	margin: 0px;
+	padding: 0px;
+}
