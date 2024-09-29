@@ -70,6 +70,10 @@ body {
 	margin-bottom: 20px;
 }
 
+.wrapper .btn:hover{
+	background: #418a4a;
+}
+
 .wrapper .register-link {
 	font-size: 14.5px;
 	text-align: center;
