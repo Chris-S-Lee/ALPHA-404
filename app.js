@@ -12,11 +12,37 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // 기본 라우트
 app.get('/', (req, res) => {
-    res.send('뉴스 사이트에 오신 것을 환영합니다!');
+    res.send(
+        `
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <meta charset="utf-8" />
+                <title>Main Page</title>
+                <link rel="stylesheet" href="main_styles.css" />
+            </head>
+            <body>
+                <div class="title-bar">
+                    <h1>404 Not Found</h1>
+                </div>
+            </body>
+        </html>
+        `
+        );
 });
 
 app.get('/upload', (req, res) => {
-    res.send('여기서 기사를 업로드하세요.');
+    res.send(`
+    <!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>뉴스 올리기</title>
+		<link rel="stylesheet" href="upload_styles.css" />
+	</head>
+	<body></body>
+</html>
+    `);
 });
 
 app.get('/login', (req, res) => {
@@ -27,10 +53,10 @@ app.get('/login', (req, res) => {
                 <meta charset="utf-8" />
                 <title>Login Page</title>
                 <script src="login_script.js"></script>
-                <link rel="stylesheet" href="/login_styles.css" />
+                <link rel="stylesheet" href="login_styles.css" />
             </head>
             <body>
-                <img src="/logo.png" alt="Logo" class="kjdlogo" />
+                <img src="logo.png" alt="Logo" class="kjdlogo" />
                 
                 <div class="wrapper">
                     <form action="/login" method="POST">
