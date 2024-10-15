@@ -74,7 +74,7 @@ body {
 	margin-bottom: 20px;
 }
 
-.wrapper .btn:hover{
+.wrapper .btn:hover {
 	background: #418a4a;
 }
 
@@ -94,22 +94,17 @@ body {
 	text-decoration: underline;
 }
 
-.logoimage {
-	width: 80px;
+.kjdlogo {
+	width: 200px;
 	position: absolute;
 	top: 19px;
 	left: 50%;
 	transform: translateX(-50%);
 }
 
-.divider-logo {
-	width: 420px;
-	border: none;
-	border-top: 0.5px solid #7e7e7e;
-
-	margin-bottom: 10px;
+.logo {
+	width: 300px;
 	position: absolute;
-	top: 60px;
+	bottom: 50px;
 	left: 50%;
-	transform: translateX(-50%);
 }
