@@ -84,6 +84,32 @@ app.get('/login', (req, res) => {
     `);
 });
 
+app.get('/news', (req, res) => {
+    res.send(`
+    <head>
+	<meta charset="utf-8" />
+	<title>{{뉴스 제목}}</title>
+	<link rel="stylesheet" href="news_styles.css" />
+</head>
+<body data-new-gr-c-s-check-loaded="14.1198.0" data-gr-ext-installed="">
+	<div class="top-menu">
+		<a href="#">Link</a>
+		<a href="#">Link</a>
+		<a href="#">Link</a>
+	</div>
+
+	<div class="content">
+		<h2>CSS Template</h2>
+		<p>A topnav, content and a footer.</p>
+	</div>
+
+	<div class="footer">
+		<p>Footer</p>
+	</div>
+</body>
+    `);
+});
+
 
 // 서버 시작
 app.listen(PORT, () => {
