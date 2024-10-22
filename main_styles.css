@@ -40,3 +40,79 @@ body {
 	margin: 0px;
 	padding: 0px;
 }
+/* 폰트 적용 시작 */
+html {
+	font-family: "KD";
+}
+/* 노멀라이즈 시작 */
+body,
+ul,
+li {
+	padding: 0;
+	list-style: none;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+/* 노멀라이즈 끝 */
+
+/* 라이브러리 시작 */
+/*
+  사이트의 모든 요소에 사용될 수 있는 값은 별도로 라이브러리로 정리할 수 있다.
+  사이트의 중앙에 위치하도록 결정 
+*/
+.con {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* 사이트의 최소 너비 결정 */
+.con-min-width {
+	min-width: 1200px;
+	padding: 0 10px;
+}
+/* 라이브러리 끝 */
+
+/* 커스텀 시작 */
+/* 해당 값은 해당 요소에서만 사용되는 값이므로 별도로 정리한다 */
+.con {
+	width: 1000px;
+}
+
+/* 메뉴바 시작 */
+/* <li>의 display 값은 기본적으로 block의 형태이므로 inline-block 값으로 바꿔준다 */
+.menu-bar__menu-box-1 > ul > li {
+	display: inline-block;
+}
+
+/* inline-block 형태는 text-align을 통해 정렬이 가능하다 */
+.menu-bar__menu-box-1 > ul {
+	text-align: center;
+}
+
+/* <a>와 <span>의 display 값은 기본적으로 inline의 형태이므로 text-align을 통해 정렬이 가능하다 */
+.logo-bar > div {
+	text-align: center;
+}
+
+.logo-bar > div > .logo-bar__logo {
+	font-size: 5rem;
+	text-decoration: underline;
+}
+
+.menu-bar__menu-box-1 > ul > li > a {
+	display: block;
+	font-size: 2rem;
+	padding: 10px 30px;
+}
+
+.menu-bar__menu-box-1 > ul > li:hover > a {
+	color: red;
+	text-decoration: underline;
+}
+
+.logo-bar > div > .logo-bar__logo > span > span:nth-of-type(2) {
+	color: red;
+}
