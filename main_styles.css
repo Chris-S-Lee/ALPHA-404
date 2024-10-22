@@ -1,12 +1,42 @@
+@font-face {
+	font-family: "KD";
+	font-style: normal;
+	font-weight: 300;
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Light.eot);
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Light.eot?#iefix) format("embedded-opentype"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Light.woff) format("woff"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Light.ttf) format("truetype");
+}
+@font-face {
+	font-family: "KD";
+	font-style: normal;
+	font-weight: 500;
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Medium.eot);
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Medium.eot?#iefix) format("embedded-opentype"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Medium.woff) format("woff"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Medium.ttf) format("truetype");
+}
+@font-face {
+	font-family: "KD";
+	font-style: normal;
+	font-weight: 700;
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Bold.eot);
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Bold.eot?#iefix) format("embedded-opentype"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Bold.woff) format("woff"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Bold.ttf) format("truetype");
+}
 body {
-	margin: 0px;
+	margin: 5%;
+	margin-top: 0px;
 	padding: 0px;
 }
 .title-bar {
 	text-align: center;
-	font-family: "a로케트", sans-serif;
-	font-size: 50px;
+	font-family: "KD", sans-serif;
+	font-weight: 300;
+	font-size: 100px;
 	background-color: #ddd;
+	border-bottom: black 3px solid;
 	margin: 0px;
 	padding: 0px;
 }
