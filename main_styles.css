@@ -25,94 +25,55 @@
 		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Bold.woff) format("woff"),
 		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Bold.ttf) format("truetype");
 }
+* {
+	margin: 0;
+	padding: 0;
+}
 body {
 	margin: 5%;
 	margin-top: 0px;
 	padding: 0px;
-}
-.title-bar {
-	text-align: center;
-	font-family: "KD", sans-serif;
-	font-weight: 300;
-	font-size: 100px;
-	background-color: #ddd;
-	border-bottom: black 3px solid;
-	margin: 0px;
-	padding: 0px;
-}
-/* 폰트 적용 시작 */
-html {
-	font-family: "KD";
-}
-/* 노멀라이즈 시작 */
-body,
-ul,
-li {
-	padding: 0;
 	list-style: none;
+	/* background-image: url("bg.jpg"); */
 }
-
 a {
-	color: inherit;
+	color: black;
 	text-decoration: none;
 }
-/* 노멀라이즈 끝 */
-
-/* 라이브러리 시작 */
-/*
-  사이트의 모든 요소에 사용될 수 있는 값은 별도로 라이브러리로 정리할 수 있다.
-  사이트의 중앙에 위치하도록 결정 
-*/
-.con {
+.title-bar {
+	align-items: normal;
+	background-color: #ddd;
+	border-bottom: black 0.1875em solid;
+	margin: 0px;
+	padding: 0px;
+	text-align: center;
+	display: block;
 	margin-left: auto;
 	margin-right: auto;
 }
-
-/* 사이트의 최소 너비 결정 */
-.con-min-width {
-	min-width: 1200px;
-	padding: 0 10px;
+.grid-container {
+	display: grid;
+	grid-template-columns: 10em auto 10em;
 }
-/* 라이브러리 끝 */
-
-/* 커스텀 시작 */
-/* 해당 값은 해당 요소에서만 사용되는 값이므로 별도로 정리한다 */
-.con {
-	width: 1000px;
+.grid-item {
+	border: 1px solid rgba(0, 0, 0, 0.8);
+	text-align: center;
+	font-size: 2em;
 }
 
-/* 메뉴바 시작 */
-/* <li>의 display 값은 기본적으로 block의 형태이므로 inline-block 값으로 바꿔준다 */
-.menu-bar__menu-box-1 > ul > li {
+.grid-item:hover {
+	color: green;
+	cursor: pointer;
+}
+li {
 	display: inline-block;
 }
-
-/* inline-block 형태는 text-align을 통해 정렬이 가능하다 */
-.menu-bar__menu-box-1 > ul {
+ul {
 	text-align: center;
 }
-
-/* <a>와 <span>의 display 값은 기본적으로 inline의 형태이므로 text-align을 통해 정렬이 가능하다 */
-.logo-bar > div {
-	text-align: center;
-}
-
-.logo-bar > div > .logo-bar__logo {
-	font-size: 5rem;
-	text-decoration: underline;
-}
-
-.menu-bar__menu-box-1 > ul > li > a {
+.block {
 	display: block;
 	font-size: 2rem;
-	padding: 10px 30px;
-}
-
-.menu-bar__menu-box-1 > ul > li:hover > a {
-	color: red;
-	text-decoration: underline;
-}
-
-.logo-bar > div > .logo-bar__logo > span > span:nth-of-type(2) {
-	color: red;
+	padding-left: 1.3em;
+	padding-right: 1.3em;
 }
