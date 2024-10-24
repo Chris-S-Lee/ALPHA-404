@@ -79,12 +79,6 @@ body {
 .input-box input::placeholder {
 	color: #3f3f3f;
 }
-.input-box i {
-	right: 1.25em;
-	top: 50%;
-	transform: translateY(-50);
-	font-size: 1.25em;
-}
 
 .wrapper .btn {
 	width: 100%;
