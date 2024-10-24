@@ -72,7 +72,7 @@ body {
 	margin-bottom: 20px;
 }
 
-.wrapper .btn:hover{
+.wrapper .btn:hover {
 	background: #418a4a;
 }
 
@@ -104,7 +104,6 @@ body {
 	width: 420px;
 	border: none;
 	border-top: 0.5px solid #7e7e7e;
-
 	margin-bottom: 10px;
 	position: absolute;
 	top: 60px;
