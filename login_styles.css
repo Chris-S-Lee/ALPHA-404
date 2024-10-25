@@ -25,7 +25,24 @@
 		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Bold.woff) format("woff"),
 		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Bold.ttf) format("truetype");
 }
-
+@font-face {
+	font-family: "GM";
+	src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff") format("woff");
+	font-weight: 300;
+	font-style: normal;
+}
+@font-face {
+	font-family: "GM";
+	src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff") format("woff");
+	font-weight: 500;
+	font-style: normal;
+}
+@font-face {
+	font-family: "GM";
+	src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff") format("woff");
+	font-weight: 700;
+	font-style: normal;
+}
 * {
 	margin: 0;
 	padding: 0;
@@ -116,13 +133,15 @@ body {
 }
 
 .kjdlogo {
-	width: 12.5em;
-	position: absolute;
+	margin: 0;
+	padding-top: 0;
+	padding-bottom: 0.2em;
 	text-align: center;
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-	top: 1.1875em;
+	position: absolute;
+	top: 1.2em;
 }
 
 .logo {
@@ -133,4 +152,16 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 	bottom: 3.125em;
+}
+
+#madeby {
+	font-family: GM;
+	font-size: 2em;
+	font-weight: 300;
+}
+
+#notfound {
+	font-family: GM;
+	font-size: 2em;
+	font-weight: 700;
 }
