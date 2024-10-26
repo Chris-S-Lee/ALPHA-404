@@ -31,7 +31,7 @@
 	font-family: KD;
 }
 body {
-	margin: 10%;
+	margin: 12em;
 	margin-top: 0;
 	padding: 0;
 	list-style: none;
@@ -57,8 +57,11 @@ a {
 }
 .grid-container {
 	display: grid;
-	grid-template-columns: 10em auto 10em;
-	padding: 1em;
+	grid-template-columns: 2em auto 2em;
+	padding-top: 1em;
+	padding-bottom: 0.7em;
+	padding-left: 1em;
+	padding-right: 1em;
 	border-bottom: black 0.1875em solid;
 }
 .grid-item {
