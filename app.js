@@ -206,27 +206,6 @@ app.post('/articles/:id/delete', isAuthenticated, async (req, res) => {
 });
 
 
-// 개별 게시글을 보여주는 GET 라우트
-app.get('/articles/:id', async (req, res) => {
-    const articleId = req.params.id;
-    try {
-        const [results] = await db.query(`
-            SELECT articles.*, users.username AS author_name 
-            FROM articles 
-            JOIN users ON articles.author_id = users.id 
-            WHERE articles.id = ?`, 
-            [articleId]);
-        if (results.length === 0) {
-            return res.status(404).send('Article not found');
-        }
-        // session.userId를 함께 전달
-        res.render('view_article', { article: results[0], userId: req.session.userId });
-    } catch (err) {
-        console.error('Error fetching article:', err);
-        res.status(500).send('Failed to load article');
-    }
-});
-
 
 app.get('/articles/category/:category', async (req, res) => {
     const category = req.params.category;
@@ -283,3 +262,30 @@ function timeAgo(createdAt) {
 function formatTime(createdAt, format = "YYYY-MM-DD HH:mm:ss") {
 	return moment(createdAt).format(format);
 }
+
+// 개별 게시글을 보여주는 GET 라우트
+app.get('/articles/:id', async (req, res) => {
+    const articleId = req.params.id;
+    try {
+        // 조회수 증가 쿼리 실행 및 확인용 로그
+        await db.query('UPDATE articles SET views = views + 1 WHERE id = ?', [articleId]);
+        console.log(`Views incremented for article ID: ${articleId}`);
+        
+        const [results] = await db.query(`
+            SELECT articles.*, users.username AS author_name 
+            FROM articles 
+            JOIN users ON articles.author_id = users.id 
+            WHERE articles.id = ?`, 
+            [articleId]);
+        
+        if (results.length === 0) {
+            return res.status(404).send('Article not found');
+        }
+
+        console.log(`Article fetched:`, results[0]); // 조회된 게시글 내용 확인
+        res.render('view_article', { article: results[0], userId: req.session.userId });
+    } catch (err) {
+        console.error('Error fetching article:', err);
+        res.status(500).send('Failed to load article');
+    }
+});
