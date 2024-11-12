@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/public/main_styles.css" />
+    <link rel="icon" type="image/x-icon" href="/public/favicon.png" />
+    <title>KJD</title>
+</head>
+<body>
+    <%- include("header") %>
+    <div class="others">
+    <div class="news">
+
+        <% articles.forEach(article => { %>
+            <p>
+                <a href="/articles/<%= article.id %>">
+                    <%= article.title %>
+                </a>
+            </p>
+        <% }) %>
+
+    </ul>
+    </div>
+    </div>
+    <ul>
+</body>
+</html>
