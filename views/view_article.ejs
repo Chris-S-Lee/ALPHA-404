@@ -1,42 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/public/favicon.png" />
-    <title><%= article.title %></title>
-</head>
-<body>
-    <%- include("header") %>
-    <h2><a href="/articles/category/<%= article.category %>" class="block"><%= article.category %></a></h2>
-    <h1><%= article.title %></h1>
-    <h2><%= article.author_name %> 기자</h2>
-    <p>등록 <%= article.created_at.toDateString() %></p>
-    
-    <% if (article.author_id === userId) { %>
-        <a href="/articles/<%= article.id %>/edit">Edit</a>
-        <form action="/articles/<%= article.id %>/delete" method="POST" style="display:inline;">
-            <button type="submit">Delete</button>
-        </form>
-    <% } %>
-    <hr>
-    <div>
-        <p><%= article.content %></p>
-    </div>
-
-    <!-- 파일이 있을 경우 표시 -->
-    <% if (article.attachment) { %>
-        <div>
-            <!-- 파일이 이미지일 경우 이미지로 표시하고, 아니면 다운로드 링크로 표시 -->
-            <% if (article.attachment.match(/\.(jpg|jpeg|png|gif)$/i)) { %>
-                <img src="/uploads/<%= article.image %>" alt="Article Image">
-            <% } else { %>
-                <a href="/<%= article.attachment %>" download>Download attachment</a>
-            <% } %>
-        </div>
-    <% } %>
-
-    <button onclick="copyLink()">기사 공유하기</button>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" href="/public/article_styles.css" />
+		<link rel="icon" type="image/x-icon" href="favicon.png" />
+		<title><%= article.title %></title>
+	</head>
+	<body>
+		<%-include("header.ejs") %>
+		<h1><%= article.title %></h1>
+		<p><strong>작성자:</strong> <%= article.author_name %></p>
+		<p><strong>카테고리:</strong> <%= article.category %></p>
+		<p><strong>업로드 시간:</strong> <%= article.createdAtFormatted %></p>
+		<!-- 서버에서 넘겨준 시간 차이 표시 -->
+		<p><strong>조회수:</strong> <%= article.views %></p>
+        <% if (article.author_id === userId) { %>
+            <a href="/articles/<%= article.id %>/edit">Edit</a>
+            <form action="/articles/<%= article.id %>/delete" method="POST" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        <% } %>
+		<p><%= article.content %></p>
+	</body>
+</html>
+<button onclick="copyLink()">기사 공유하기</button>
 
 <script>
 function copyLink() {

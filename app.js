@@ -259,3 +259,27 @@ app.get('/logout', (req, res) => {
 });
 
 app.use('/uploads', express.static('uploads'));
+
+// 시간 차이 계산 함수 (서버에서 처리)
+function timeAgo(createdAt) {
+	const now = new Date();
+	const diffInSeconds = Math.floor((now - new Date(createdAt)) / 1000);
+	const diffInMinutes = Math.floor(diffInSeconds / 60);
+	const diffInHours = Math.floor(diffInMinutes / 60);
+	const diffInDays = Math.floor(diffInHours / 24);
+
+	if (diffInMinutes < 1) {
+		return "방금 전";
+	} else if (diffInMinutes < 60) {
+		return `${diffInMinutes}분 전`;
+	} else if (diffInHours < 24) {
+		return `${diffInHours}시간 전`;
+	} else {
+		return `${diffInDays}일 전`;
+	}
+}
+
+// 시간 표기 함수 수정
+function formatTime(createdAt, format = "YYYY-MM-DD HH:mm:ss") {
+	return moment(createdAt).format(format);
+}
