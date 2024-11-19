@@ -4,37 +4,77 @@
 		<meta charset="UTF-8" />
 		<link rel="stylesheet" href="/public/article_styles.css" />
 		<link rel="icon" type="image/x-icon" href="favicon.png" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+			integrity="sha512-Fo3rlrZj/k7ujTnHq6SlO3o8yb+TYiPQdBvAb67D8AVg9Y55ng93bhThyjaE4PCv9LMmS29EzKUGtQZuvqUqYg=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/>
 		<title><%= article.title %></title>
 	</head>
 	<body>
 		<%-include("header.ejs") %>
-		<h1><%= article.title %></h1>
-		<p><strong>작성자:</strong> <%= article.author_name %></p>
-		<p><strong>카테고리:</strong> <%= article.category %></p>
-		<p><strong>업로드 시간:</strong> <%= article.createdAtFormatted %></p>
-		<!-- 서버에서 넘겨준 시간 차이 표시 -->
-		<p><strong>조회수:</strong> <%= article.views %></p>
-        <% if (article.author_id === userId) { %>
-            <a href="/articles/<%= article.id %>/edit">Edit</a>
-            <form action="/articles/<%= article.id %>/delete" method="POST" style="display:inline;">
-                <button type="submit">Delete</button>
-            </form>
-        <% } %>
-		<p><%= article.content %></p>
+
+		<div class="container">
+			<!-- 기사 내용 영역 -->
+			<main>
+				<div class="categoryandtitle">
+					<li>
+						<a href="/articles/category/<%= article.category %>" class="categoryman">
+							<%= article.category %>
+						</a>
+					</li>
+					<h2><%= article.title %></h2>
+					<p class="main-title"><strong><%= article.author_name %> 기자</strong></p>
+				</div>
+			<!-- 기사를 쓴 날짜 추가 -->
+			<p class="article-date-and-actions">
+				<span class="article-date"><%= article.createdAtFormatted %></span>
+				<div class="action-buttons">
+					<% if (article.author_id === userId) { %>
+						<a href="/articles/<%= article.id %>/edit" class="icon-button" title="Edit">
+							<i class="fas fa-edit"></i>
+						</a>
+						<form
+							action="/articles/<%= article.id %>/delete"
+							method="POST"
+							style="display: inline;"
+							title="Delete"
+						>
+							<button type="submit" class="icon-button-delete">
+								<i class="fas fa-trash-alt"></i>
+							</button>
+						</form>
+					<% } %>
+					<button onclick="copyLink()" class="icon-button" title="Share">
+						<i class="fas fa-share-alt"></i>
+					</button>
+				</div>
+			</p>
+				
+				<p><%= article.views %>회</p>
+				<hr />
+				<!-- 기사 내용 -->
+				<p><%= article.content %></p>
+			</main>
+		</div>
+		<hr />
+		<!-- 저작권 표시 -->
+		<p class="copyright">[저작권자 © KJD, 무단전재 및 재배포 금지]</p>
+
+		<script>
+			function copyLink() {
+				const link = window.location.href;
+				navigator.clipboard
+					.writeText(link)
+					.then(() => {
+						alert("Link copied to clipboard!");
+					})
+					.catch((err) => {
+						console.error("Could not copy link: ", err);
+					});
+			}
+		</script>
 	</body>
-</html>
-<button onclick="copyLink()">기사 공유하기</button>
-
-<script>
-function copyLink() {
-    const link = window.location.href;
-    navigator.clipboard.writeText(link).then(() => {
-        alert('Link copied to clipboard!');
-    }).catch(err => {
-        console.error('Could not copy link: ', err);
-    });
-}
-</script>
-
-</body>
 </html>

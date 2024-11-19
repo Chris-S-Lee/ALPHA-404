@@ -50,6 +50,17 @@ h3 {
 	font-weight: 700;
 	font-size: 1.5em;
 }
+
+label {
+	font-family: KD;
+	font-weight: 700;
+	font-size: 1.5em;
+}
+
 #content-input {
+	height: 30em;
+}
+
+#content {
 	height: 30em;
 }

@@ -1,128 +1,208 @@
- /* 전체 폰트 설정 */
- body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    background-color: #f4f4f9;
-    color: #333;
-    margin: 0;
-    padding: 0;
+        /* 전체 폰트 설정 */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 레이아웃 설정 */
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 기사 영역 */
+        main {
+            flex: 3;
+            padding-right: 20px;
+            /*border: 4px solid #2c3e50;  /* 기사 테두리 두껍게 */
+            padding: 20px;
+            border-radius: 8px;
+
+        }
+
+        /* 제목 스타일 */
+        h2 {
+            text-align: center;
+            font-size: 40px;
+            color: #000000;
+            margin-top: 20px;
+        }
+
+        /* 서브 타이틀 */
+        .main-title {
+            font-size: 15px;
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        /* 카테고리와 타이틀 */
+        .categoryandtitle {
+            font-size: 15px;
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        /* 카테고리 */
+        .categoryandtitle {
+            font-size: 15px;
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 10px;
+            
+        }
+
+        .sub-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #34495e;
+            padding: 10px 0;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        /* 본문 스타일 */
+        p {
+            padding: 10px 0;
+            margin: 0;
+        }
+
+        /* SNS 아이콘 스타일 */
+        .social-icons {
+            text-align: right;
+            padding: 10px 0;
+        }
+
+        .social-icons img {
+            margin-left: 5px;
+        }
+
+        /* 기사 이미지 */
+        .main-image {
+            margin: 10px 0;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        /* 오른쪽 광고 및 기사 목록 */
+        aside {
+            flex: 1;
+            padding-left: 20px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+
+        /* 다른 기사 및 광고 스타일 */
+        .related-articles, .ad-section, .weather-section {
+            margin-bottom: 20px;
+            border: 3px solid #bdc3c7;  /* 관련 기사 및 광고 테두리 두껍게 */
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .related-articles h3, .ad-section h3, .weather-section h3 {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #bdc3c7;
+            padding-bottom: 5px;
+        }
+
+        .related-articles ul, .ad-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .related-articles li, .ad-section li {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        /* 저작권 표시 */
+        .copyright {
+            text-align: center;
+            font-size: 12px;
+            color: #7f8c8d;
+            padding: 20px;
+            /*border-top: 2px solid #000000;  /* 저작권 구분선도 두껍게 */
+            /*background-color: #ecf0f1;*/
+        }
+
+        /* 구분선 */
+        hr {
+            border: 0;
+            border-top: 2px solid #2c3e50;  /* 구분선 두껍게 */
+            margin: 20px 0;
+        }
+
+        /* 버튼 영역 스타일 */
+.action-buttons {
+	display: flex;
+	gap: 10px;
+	margin-top: 10px;
+	align-items: center;
 }
 
-/* 레이아웃 설정 */
-.container {
-    display: flex;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+/* 아이콘 버튼 스타일 */
+.icon-button {
+	background-color: #f9f9f9;
+	border: 1px solid #ddd;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-decoration: none;
+	color: #555;
+	font-size: 18px;
+	transition: background-color 0.3s, color 0.3s;
+	cursor: pointer;
 }
 
-/* 기사 영역 */
-main {
-    flex: 3;
-    padding-right: 20px;
-    border: 4px solid #2c3e50;  /* 기사 테두리 두껍게 */
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #fff;  /* 배경색을 흰색으로 설정 */
+.icon-button:hover {
+	background-color: green;
+	color: #fff;
+	border-color: green;
 }
 
-/* 제목 스타일 */
-h2 {
-    text-align: center;
-    font-size: 40px;
-    color: #2c3e50;
-    margin-top: 20px;
+/* 삭제 아이콘 버튼 스타일 */
+.icon-button-delete {
+	background-color: #f9f9f9;
+	border: 1px solid #ddd;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-decoration: none;
+	color: #555;
+	font-size: 18px;
+	transition: background-color 0.3s, color 0.3s;
+	cursor: pointer;
 }
 
-/* 서브 타이틀 */
-.main-title {
-    font-size: 15px;
-    color: #7f8c8d;
-    text-align: center;
-    margin-bottom: 10px;
+.icon-button-delete:hover {
+	background-color: red;
+	color: #fff;
+	border-color: red;
 }
 
-.sub-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #34495e;
-    padding: 10px 0;
-    background-color: #ecf0f1;
-    border-radius: 5px;
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-/* 본문 스타일 */
-p {
-    padding: 10px 0;
-    margin: 0;
-}
-
-/* SNS 아이콘 스타일 */
-.social-icons {
-    text-align: right;
-    padding: 10px 0;
-}
-
-.social-icons img {
-    margin-left: 5px;
-}
-
-/* 기사 이미지 */
-.main-image {
-    margin: 10px 0;
-    width: 100%;
-    max-width: 500px;
-}
-
-/* 오른쪽 광고 및 기사 목록 */
-aside {
-    flex: 1;
-    padding-left: 20px;
-    background-color: #ecf0f1;
-    border-radius: 5px;
-}
-
-/* 다른 기사 및 광고 스타일 */
-.related-articles, .ad-section, .weather-section {
-    margin-bottom: 20px;
-    border: 3px solid #bdc3c7;  /* 관련 기사 및 광고 테두리 두껍게 */
-    padding: 15px;
-    border-radius: 5px;
-}
-
-.related-articles h3, .ad-section h3, .weather-section h3 {
-    font-size: 20px;
-    color: #2c3e50;
-    margin-bottom: 10px;
-    border-bottom: 2px solid #bdc3c7;
-    padding-bottom: 5px;
-}
-
-.related-articles ul, .ad-section ul {
-    list-style: none;
-    padding: 0;
-}
-
-.related-articles li, .ad-section li {
-    margin-bottom: 10px;
-    font-size: 16px;
-}
-
-/* 저작권 표시 */
-.copyright {
-    text-align: center;
-    font-size: 12px;
-    color: #7f8c8d;
-    padding: 20px;
-    border-top: 2px solid #bdc3c7;  /* 저작권 구분선도 두껍게 */
-    background-color: #ecf0f1;
-}
-
-/* 구분선 */
-hr {
-    border: 0;
-    border-top: 3px solid #bdc3c7;  /* 구분선 두껍게 */
-    margin: 20px 0;
+.icon-button button {
+	background: none;
+	border: none;
+	outline: none;
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
 }

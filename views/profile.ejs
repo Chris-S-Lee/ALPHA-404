@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+    <h1><%= user.username %>'s Profile</h1>
+    <p><strong>Bio:</strong> <%= user.bio || "No bio yet." %></p>
+
+    <% if (isOwner) { %>
+        <!-- 자기소개 수정 폼 -->
+        <form action="/profile/<%= user.id %>/edit" method="POST">
+            <textarea name="bio" rows="4" cols="50"><%= user.bio %></textarea>
+            <button type="submit">Update Bio</button>
+        </form>
+    <% } %>
+
+    <h2>Articles</h2>
+    <ul>
+        <% articles.forEach(article => { %>
+            <li>
+                <a href="/articles/<%= article.id %>"><%= article.title %></a>
+                (<%= moment(article.created_at).format('YYYY-MM-DD') %>)
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>

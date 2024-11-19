@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt'); // 비밀번호 해시를 위한 bcrypt 모듈
 const session = require('express-session'); // 사용자 세션 관리를 위한 express-session 모듈
 require('dotenv').config(); // .env 파일에서 환경 변수를 불러옵니다.
 
+
 //파일 업로드 기능을 위한 미들웨어
 const multer = require('multer'); // multer 모듈 추가
 const path = require('path');
@@ -14,6 +15,9 @@ const app = express();
 
 // 서버 포트 설정
 const PORT = 3000;
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // JSON 및 URL-encoded 데이터 파싱 미들웨어를 추가합니다.
 app.use(express.json());
@@ -91,13 +95,42 @@ app.post('/login', async (req, res) => {
 // 홈페이지를 위한 GET 라우트
 app.get('/', async (req, res) => {
     try {
-        const [articles] = await db.query('SELECT id, title, created_at FROM articles ORDER BY created_at DESC');
-        res.render('index', { articles });
+        const [articles] = await db.query(`
+            SELECT 
+                articles.id, 
+                articles.title, 
+                articles.content, 
+                articles.created_at, 
+                articles.views, 
+                users.username AS author_name 
+            FROM articles 
+            JOIN users ON articles.author_id = users.id
+            ORDER BY articles.created_at DESC
+        `);
+
+        const articlesArray = articles.map(article => {
+            article.timeAgo = timeAgo(article.created_at);
+            return article;
+        });
+
+        const latestArticles = [...articlesArray].slice(0, 10);
+        const topArticles = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 5);
+        const mainArticle = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 1);
+
+        res.render('index', {
+            articles: articlesArray,
+            latestArticles,
+            topArticles,
+            mainArticle,
+        });
     } catch (err) {
         console.error('Error fetching articles:', err);
-        res.status(500).send('Failed to load articles');
+        res.status(500).send('기사를 불러오지 못합니다.');
     }
 });
+
+
+
 
 // 인증 확인 미들웨어
 function isAuthenticated(req, res, next) {
@@ -142,14 +175,14 @@ app.get('/articles/new', isAuthenticated, (req, res) => {
 
 // 게시글 작성 요청을 처리하는 POST 라우트
 app.post('/articles', isAuthenticated, upload.single('attachment'), async (req, res) => {
-    const { title, content, category } = req.body; // category
+    const { title, content, category } = req.body;
     const authorId = req.session.userId;
     const filePath = req.file ? req.file.path : null;
 
     try {
         await db.query(
             'INSERT INTO articles (title, content, author_id, category, attachment) VALUES (?, ?, ?, ?, ?)',
-            [title, content, authorId, category, filePath] // category
+            [title, content, authorId, category, filePath]
         );
         res.redirect('/');
     } catch (err) {
@@ -263,11 +296,12 @@ function formatTime(createdAt, format = "YYYY-MM-DD HH:mm:ss") {
 	return moment(createdAt).format(format);
 }
 
+const moment = require('moment'); // moment 모듈 가져오기 (시간 포맷을 위한)
+
 // 개별 게시글을 보여주는 GET 라우트
 app.get('/articles/:id', async (req, res) => {
     const articleId = req.params.id;
     try {
-        // 조회수 증가 쿼리 실행 및 확인용 로그
         await db.query('UPDATE articles SET views = views + 1 WHERE id = ?', [articleId]);
         console.log(`Views incremented for article ID: ${articleId}`);
         
@@ -282,8 +316,11 @@ app.get('/articles/:id', async (req, res) => {
             return res.status(404).send('Article not found');
         }
 
-        console.log(`Article fetched:`, results[0]); // 조회된 게시글 내용 확인
-        res.render('view_article', { article: results[0], userId: req.session.userId });
+        // createdAt 필드를 원하는 포맷으로 변환하여 추가
+        const article = results[0];
+        article.createdAtFormatted = moment(article.created_at).format('YYYY-MM-DD HH:mm:ss');
+
+        res.render('view_article', { article, userId: req.session.userId });
     } catch (err) {
         console.error('Error fetching article:', err);
         res.status(500).send('Failed to load article');

@@ -4,19 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/public/favicon.png" />
+    <link rel="stylesheet" href="/public/upload_styles.css" />
     <title>기사 수정</title>
 </head>
 <body>
+    <%- include("header") %>
+
+
     <h1>기사 수정</h1>
     <form action="/articles/<%= article.id %>/edit" method="POST">
         <label for="title">제목</label>
-        <input type="text" id="title" name="title" value="<%= article.title %>" required>
+        <input type="text" id="title-input" name="title" value="<%= article.title %>" required>
         <br>
         <label for="content">내용</label>
-        <textarea id="content" name="content" required><%= article.content %></textarea>
+        <textarea id="content" name="content" rows="5" required><%= article.content %></textarea>
+
         <br>
-        <button type="submit">기사 업데이트하기</button>
+        <button type="submit" id="upload">기사 업데이트하기</button>
     </form>
-    <a href="/">취소</a>
+    <a href="/articles/<%= article.id %>">취소</a>
 </body>
 </html>
