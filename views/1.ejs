@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" href="index_styles.css" />
+		<title>뉴스 사이트</title>
+		<link rel="icon" type="image/x-icon" href="favicon.png" />
+	</head>
+	<body>
+		<%-include("header.ejs") %>
+
+		<ul>
+			<% mainArticle.forEach(article => { %>
+			<li>
+				<h1 class="main-title"><a href="/article/<%= article.id %>"><%= article.title %></a></h1>
+			</li>
+			<li class="main-news">
+				<p><%= article.content %></p>
+				<img src="picture1.jpg" />
+
+				<p><%= article.createdAtFormatted %> <%= article.author %> 기자</p>
+			</li>
+			<% }) %>
+		</ul>
+		<div class="others">
+			<ul class="others-title">
+				<% latestArticles.forEach(article => { %>
+				<div>
+					<li>
+						<a href="/article/<%= article.id %>"><%= article.title %></a>
+						<!-- - <small><%= article.createdAtFormatted %></small> -->
+						<!-- 서버에서 넘겨준 시간 차이 표시 -->
+					</li>
+				</div>
+				<% }) %>
+			</ul>
+
+			<ul class="top-news">
+				<h3>실시간 TOP 기사</h3>
+				<% topArticles.forEach(article => { %>
+				<div class="content">
+					<li>
+						<div class="sub">
+							<div class="category"><%= article.tag %></div>
+							<a href="/article/<%= article.id %>"><%= article.title %></a>
+							<!-- - <small><%= article.timeAgo %></small> -->
+							<!-- 서버에서 넘겨준 시간 차이 표시 -->
+						</div>
+					</li>
+				</div>
+				<% }) %>
+			</ul>
+		</div>
+	</body>
+</html>

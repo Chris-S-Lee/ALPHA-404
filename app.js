@@ -56,9 +56,25 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage }); // multer 설정 완료
 
-// 로그인 페이지를 위한 GET 라우트
-app.get("/login", (req, res) => {
+// 인증 확인 미들웨어
+function isAuthenticated(req, res, next) {
+	if (req.session.userId) {
+		return next();
+	}
+	res.status(401).send("You need to log in");
+}
+
+//로그인 확인 - 프로필
+function isProfileOk(req, res, next) {
+	if (req.session.userId) {
+		return next();
+	}
 	res.render("login"); // 로그인 화면 렌더링
+}
+
+// 로그인 페이지를 위한 GET 라우트
+app.get("/login", isProfileOk, (req, res) => {
+	res.redirect("/profile"); // 로그인 화면 렌더링
 });
 
 // 로그인 요청 처리를 위한 POST 라우트
@@ -129,14 +145,6 @@ app.get("/", async (req, res) => {
 	}
 });
 
-// 인증 확인 미들웨어
-function isAuthenticated(req, res, next) {
-	if (req.session.userId) {
-		return next();
-	}
-	res.status(401).send("You need to log in");
-}
-
 // 회원가입 페이지를 위한 GET 라우트
 app.get("/register", (req, res) => {
 	res.render("register");
@@ -158,11 +166,6 @@ app.post("/register", async (req, res) => {
 			res.status(500).render("registration_failed");
 		}
 	}
-});
-
-// 서버를 시작하고 설정된 포트에서 요청을 수신합니다.
-app.listen(PORT, () => {
-	console.log(`Server running on http://localhost:${PORT}`);
 });
 
 // 게시글 작성 폼을 렌더링하는 GET 라우트 (로그인 확인)
@@ -309,7 +312,7 @@ app.get("/articles/:id", async (req, res) => {
 
 		const [results] = await db.query(
 			`
-            SELECT articles.*, users.username AS author_name 
+			SELECT articles.*, users.username AS author_name 
             FROM articles 
             JOIN users ON articles.author_id = users.id 
             WHERE articles.id = ?`,
@@ -329,4 +332,9 @@ app.get("/articles/:id", async (req, res) => {
 		console.error("Error fetching article:", err);
 		res.status(500).send("Failed to load article");
 	}
+});
+
+// 서버를 시작하고 설정된 포트에서 요청을 수신합니다.
+app.listen(PORT, () => {
+	console.log(`Server running on http://localhost:${PORT}`);
 });

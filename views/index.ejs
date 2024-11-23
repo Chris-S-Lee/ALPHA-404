@@ -1,45 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/public/main_styles.css" />
-    <link rel="icon" type="image/x-icon" href="/public/favicon.png" />
-    <title>KJD</title>
-</head>
-<body>
-    <%-include("header.ejs") %>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/public/index_styles.css" />
+		<link rel="icon" type="image/x-icon" href="/public/favicon.png" />
+		<title>KJD</title>
+	</head>
+	<body>
+		<%-include("header.ejs") %>
 
-    <ul>
-        <% mainArticle.forEach(article => { %>
-        <li>
-            <h1 class="main-title"><a href="/articles/<%= article.id %>"><%= article.title %></a></h1>
-        </li>
-        <li class="main-news">
-            <p><%= article.content.length > 100 ? article.content.substring(0, 50) + '...' : article.content %></p>
-            <% if (article.image) { %>
-            <img src="<%= article.image %>" alt="<%= article.title %>" width="300" />
-            <% } %>
-            <p><%= article.createdAtFormatted %> <%= article.author_name %> 기자</p>
-        </li>
-        <% }) %>
-    </ul>
-    
-    <div class="others">
-        <div class="news">
-    
-            <% articles.forEach(article => { %>
-                <p>
-                    <a href="/articles/<%= article.id %>">
-                        <%= article.title %>
-                    </a>
-                    <a class="auth"><%= article.author_name %> 기자</a>
-                </p>
-            <% }) %>
-    
-        </ul>
-        </div>
-        </div>
-        <ul>
-</body>
+		<ul>
+			<% mainArticle.forEach(article => { %>
+			<li>
+				<h1 class="main-title"><a href="/articles/<%= article.id %>"><%= article.title %></a></h1>
+			</li>
+			<li class="main-news">
+				<p><%= article.content.length > 100 ? article.content.substring(0, 50) + '...' : article.content %></p>
+				<% if (article.image) { %>
+				<img src="<%= article.image %>" alt="<%= article.title %>" width="300" />
+				<% } %>
+				<p><%= article.createdAtFormatted %> <%= article.author_name %> 기자</p>
+			</li>
+			<% }) %>
+		</ul>
+
+		<div class="others">
+			<ul class="others-title">
+				<% articles.forEach(article => { %>
+				<div>
+					<li>
+						<a href="/articles/<%= article.id %>"> <%= article.title %> </a>
+					</li>
+				</div>
+				<% }) %>
+			</ul>
+
+			<ul class="top-news">
+				<h3>실시간 TOP 기사</h3>
+				<% topArticles.forEach(article => { %>
+				<div class="content">
+					<li>
+						<div class="sub">
+							<div class="category"><%= article.category %></div>
+							<a href="/article/<%= article.id %>"><%= article.title %></a>
+							<!-- - <small><%= article.timeAgo %></small> -->
+							<!-- 서버에서 넘겨준 시간 차이 표시 -->
+						</div>
+					</li>
+				</div>
+				<% }) %>
+			</ul>
+		</div>
+	</body>
 </html>
