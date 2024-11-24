@@ -55,6 +55,7 @@ const storage = multer.diskStorage({
 	},
 });
 const upload = multer({ storage: storage }); // multer 설정 완료
+const moment = require("moment"); // moment 모듈 가져오기 (시간 포맷을 위한)
 
 // 인증 확인 미들웨어
 function isAuthenticated(req, res, next) {
@@ -64,17 +65,33 @@ function isAuthenticated(req, res, next) {
 	res.status(401).send("You need to log in");
 }
 
-//로그인 확인 - 프로필
-function isProfileOk(req, res, next) {
-	if (req.session.userId) {
-		return next();
+// 시간 차이 계산 함수 (서버에서 처리)
+function timeAgo(createdAt) {
+	const now = new Date();
+	const diffInSeconds = Math.floor((now - new Date(createdAt)) / 1000);
+	const diffInMinutes = Math.floor(diffInSeconds / 60);
+	const diffInHours = Math.floor(diffInMinutes / 60);
+	const diffInDays = Math.floor(diffInHours / 24);
+
+	if (diffInMinutes < 1) {
+		return "방금 전";
+	} else if (diffInMinutes < 60) {
+		return `${diffInMinutes}분 전`;
+	} else if (diffInHours < 24) {
+		return `${diffInHours}시간 전`;
+	} else {
+		return `${diffInDays}일 전`;
 	}
-	res.render("login"); // 로그인 화면 렌더링
+}
+
+// 시간 표기 함수 수정
+function formatTime(createdAt, format = "YYYY-MM-DD HH:mm:ss") {
+	return moment(createdAt).format(format);
 }
 
 // 로그인 페이지를 위한 GET 라우트
-app.get("/login", isProfileOk, (req, res) => {
-	res.redirect("/profile"); // 로그인 화면 렌더링
+app.get("/login", (req, res) => {
+	res.render("login");
 });
 
 // 로그인 요청 처리를 위한 POST 라우트
@@ -108,32 +125,143 @@ app.post("/login", async (req, res) => {
 	}
 });
 
-// 홈페이지를 위한 GET 라우트
+// 로그아웃 라우터 설정
+app.get("/logout", (req, res) => {
+	// 세션 삭제 후 리다이렉트
+	req.session.destroy((err) => {
+		if (err) {
+			console.error(err);
+			return res.redirect("/"); // 오류 발생 시 홈으로 리다이렉트
+		}
+		res.clearCookie("connect.sid"); // 세션 쿠키 삭제
+		res.redirect("/"); // 홈 페이지로 리다이렉트
+	});
+});
+
 app.get("/", async (req, res) => {
+	if (req.session.userId) {
+		try {
+			const [articles] = await db.query(`
+							SELECT 
+									articles.id, 
+									articles.title, 
+									articles.content, 
+									articles.created_at, 
+									articles.views, 
+									users.username AS author_name 
+							FROM articles 
+							JOIN users ON articles.author_id = users.id
+							ORDER BY articles.created_at DESC
+					`);
+
+			const articlesArray = articles.map((article) => {
+				article.timeAgo = timeAgo(article.created_at);
+				return article;
+			});
+
+			const head = `<!DOCTYPE html>
+			<html>
+				<head>
+					<meta charset="utf-8" />
+					<title>Main Page</title>
+					<link rel="stylesheet" href="/public/header_styles.css" />
+					<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+					<script src="https://kit.fontawesome.com/a914ae0fb8.js" crossorigin="anonymous"></script>
+					<link rel="icon" type="image/x-icon" href="/public/favicon.png" />
+				</head>
+				<body>
+					<a href="/" class="title-bar"><img src="/public/logo.png" /></a>
+					<div class="grid-container">
+						<div class="grid-item" id="upload">
+							<a href="/articles/new"><i class="fas fa-pen-fancy"></i></a>
+						</div>
+						<div class="grid-item">
+							<ul>
+								<li><a href="/articles/category/사회" class="block">사회</a></li>
+								<li><a href="/articles/category/문화" class="block">문화</a></li>
+								<li><a href="/articles/category/국제" class="block">국제</a></li>
+								<li><a href="/articles/category/교육" class="block">교육</a></li>
+							</ul>
+						</div>
+						<div class="grid-item" id="profile">
+							<a href="/profile"><i class="fas fa-bars"></i></a>
+							<a href="/logout" id="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+						</div>
+					</div>
+				</body>
+			</html>`;
+
+			const latestArticles = [...articlesArray].slice(0, 10);
+			const topArticles = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 5);
+			const mainArticle = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 1);
+			res.render("index", {
+				articles: articlesArray,
+				latestArticles,
+				topArticles,
+				mainArticle,
+				head,
+			});
+		} catch (err) {
+			console.error("Error fetching articles:", err);
+			res.status(500).send("기사를 불러오지 못합니다.");
+		}
+	}
 	try {
 		const [articles] = await db.query(`
-            SELECT 
-                articles.id, 
-                articles.title, 
-                articles.content, 
-                articles.created_at, 
-                articles.views, 
-                users.username AS author_name 
-            FROM articles 
-            JOIN users ON articles.author_id = users.id
-            ORDER BY articles.created_at DESC
-        `);
+						SELECT 
+								articles.id, 
+								articles.title, 
+								articles.content, 
+								articles.created_at, 
+								articles.views, 
+								users.username AS author_name 
+						FROM articles 
+						JOIN users ON articles.author_id = users.id
+						ORDER BY articles.created_at DESC
+				`);
 
 		const articlesArray = articles.map((article) => {
 			article.timeAgo = timeAgo(article.created_at);
 			return article;
 		});
 
+		const head = `<!DOCTYPE html>
+			<html>
+				<head>
+					<meta charset="utf-8" />
+					<title>Main Page</title>
+					<link rel="stylesheet" href="/public/header_styles.css" />
+					<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+					<script src="https://kit.fontawesome.com/a914ae0fb8.js" crossorigin="anonymous"></script>
+					<link rel="icon" type="image/x-icon" href="/public/favicon.png" />
+				</head>
+				<body>
+					<a href="/" class="title-bar"><img src="/public/logo.png" /></a>
+					<div class="grid-container">
+						<div class="grid-item" id="upload">
+							<a href="/articles/new"><i class="fas fa-pen-fancy"></i></a>
+						</div>
+						<div class="grid-item">
+							<ul>
+								<li><a href="/articles/category/사회" class="block">사회</a></li>
+								<li><a href="/articles/category/문화" class="block">문화</a></li>
+								<li><a href="/articles/category/국제" class="block">국제</a></li>
+								<li><a href="/articles/category/교육" class="block">교육</a></li>
+							</ul>
+						</div>
+						<div class="grid-item" id="profile">
+							<a href="/login"><i class="fas fa-user"></i></a>
+							<a href="/logout" id="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+						</div>
+					</div>
+				</body>
+			</html>`;
+
 		const latestArticles = [...articlesArray].slice(0, 10);
 		const topArticles = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 5);
 		const mainArticle = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 1);
-
 		res.render("index", {
+			head,
 			articles: articlesArray,
 			latestArticles,
 			topArticles,
@@ -257,51 +385,7 @@ app.get("/articles/category/:category", async (req, res) => {
 });
 const fs = require("fs"); // 파일 시스템 모듈을 가져옵니다
 
-// 서버 시작 시 'uploads' 폴더가 존재하지 않으면 생성합니다
-if (!fs.existsSync("uploads")) {
-	fs.mkdirSync("uploads");
-}
-
-// 로그아웃 라우터 설정
-app.get("/logout", (req, res) => {
-	// 세션 삭제 후 리다이렉트
-	req.session.destroy((err) => {
-		if (err) {
-			console.error(err);
-			return res.redirect("/"); // 오류 발생 시 홈으로 리다이렉트
-		}
-		res.clearCookie("connect.sid"); // 세션 쿠키 삭제
-		res.redirect("/"); // 홈 페이지로 리다이렉트
-	});
-});
-
 app.use("/uploads", express.static("uploads"));
-
-// 시간 차이 계산 함수 (서버에서 처리)
-function timeAgo(createdAt) {
-	const now = new Date();
-	const diffInSeconds = Math.floor((now - new Date(createdAt)) / 1000);
-	const diffInMinutes = Math.floor(diffInSeconds / 60);
-	const diffInHours = Math.floor(diffInMinutes / 60);
-	const diffInDays = Math.floor(diffInHours / 24);
-
-	if (diffInMinutes < 1) {
-		return "방금 전";
-	} else if (diffInMinutes < 60) {
-		return `${diffInMinutes}분 전`;
-	} else if (diffInHours < 24) {
-		return `${diffInHours}시간 전`;
-	} else {
-		return `${diffInDays}일 전`;
-	}
-}
-
-// 시간 표기 함수 수정
-function formatTime(createdAt, format = "YYYY-MM-DD HH:mm:ss") {
-	return moment(createdAt).format(format);
-}
-
-const moment = require("moment"); // moment 모듈 가져오기 (시간 포맷을 위한)
 
 // 개별 게시글을 보여주는 GET 라우트
 app.get("/articles/:id", async (req, res) => {
@@ -338,3 +422,8 @@ app.get("/articles/:id", async (req, res) => {
 app.listen(PORT, () => {
 	console.log(`Server running on http://localhost:${PORT}`);
 });
+
+// 서버 시작 시 'uploads' 폴더가 존재하지 않으면 생성합니다
+if (!fs.existsSync("uploads")) {
+	fs.mkdirSync("uploads");
+}
