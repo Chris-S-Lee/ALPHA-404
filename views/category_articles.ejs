@@ -1,28 +1,22 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="/public/main_styles.css" />
-    <link rel="icon" type="image/x-icon" href="/public/favicon.png" />
-    <title><%= category %> 뉴스</title>
-</head>
-<body>
-    <%- include("header") %>
-    <h1><%= category %> 기사 목록</h1>
-    <div class="others">
-    <div class="news">
-
-        <% articles.forEach(article => { %>
-            <p>
-                <a href="/articles/<%= article.id %>">
-                    <%= article.title %>
-                </a>
-            </p>
-        <% }) %>
-
-    </ul>
-    </div>
-    </div>
-    <ul>
-</body>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="/public/category_styles.css" />
+		<link rel="icon" type="image/x-icon" href="/public/favicon.png" />
+		<title><%= category %> 뉴스</title>
+	</head>
+	<body>
+		<%- include("header") %>
+		<h1><%= category %> 기사 목록</h1>
+		<div class="others">
+			<div class="news">
+				<% articles.forEach(article => { %>
+				<p>
+					<a href="/articles/<%= article.id %>"> <%= article.title %> </a>
+				</p>
+				<% }) %>
+			</div>
+		</div>
+	</body>
 </html>

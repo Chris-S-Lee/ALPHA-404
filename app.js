@@ -85,7 +85,7 @@ function timeAgo(createdAt) {
 }
 
 // 시간 표기 함수 수정
-function formatTime(createdAt, format = "YYYY-MM-DD HH:mm:ss") {
+function formatTime(createdAt, format = "YYYY-MM-DD HH:mm") {
 	return moment(createdAt).format(format);
 }
 
@@ -163,11 +163,9 @@ app.get("/", async (req, res) => {
 			<html>
 				<head>
 					<meta charset="utf-8" />
-					<title>Main Page</title>
 					<link rel="stylesheet" href="/public/header_styles.css" />
 					<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
 					<script src="https://kit.fontawesome.com/a914ae0fb8.js" crossorigin="anonymous"></script>
-					<link rel="icon" type="image/x-icon" href="/public/favicon.png" />
 				</head>
 				<body>
 					<a href="/" class="title-bar"><img src="/public/logo.png" /></a>
@@ -229,11 +227,9 @@ app.get("/", async (req, res) => {
 			<html>
 				<head>
 					<meta charset="utf-8" />
-					<title>Main Page</title>
 					<link rel="stylesheet" href="/public/header_styles.css" />
 					<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
 					<script src="https://kit.fontawesome.com/a914ae0fb8.js" crossorigin="anonymous"></script>
-					<link rel="icon" type="image/x-icon" href="/public/favicon.png" />
 				</head>
 				<body>
 					<a href="/" class="title-bar"><img src="/public/logo.png" /></a>
@@ -409,7 +405,7 @@ app.get("/articles/:id", async (req, res) => {
 
 		// createdAt 필드를 원하는 포맷으로 변환하여 추가
 		const article = results[0];
-		article.createdAtFormatted = moment(article.created_at).format("YYYY-MM-DD HH:mm:ss");
+		article.createdAtFormatted = moment(article.created_at).format("YYYY-MM-DD HH:mm");
 
 		res.render("view_article", { article, userId: req.session.userId });
 	} catch (err) {

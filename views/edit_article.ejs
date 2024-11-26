@@ -4,23 +4,24 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/x-icon" href="/public/favicon.png" />
-		<link rel="stylesheet" href="/public/upload_styles.css" />
+		<link rel="stylesheet" href="/public/edit_styles.css" />
 		<title>기사 수정</title>
 	</head>
 	<body>
 		<%- include("header") %>
-
-		<h1>기사 수정</h1>
-		<form action="/articles/<%= article.id %>/edit" method="POST">
-			<label for="title">제목</label>
-			<input type="text" id="title-input" name="title" value="<%= article.title %>" required />
-			<br />
-			<label for="content">내용</label>
-			<textarea id="content" name="content" rows="5" required><%= article.content %></textarea>
-
-			<br />
-			<button type="submit" id="upload">기사 업데이트하기</button>
-		</form>
-		<a href="/articles/<%= article.id %>">취소</a>
+		<div class="edit">
+			<form action="/articles/<%= article.id %>/edit" method="POST">
+				<div class="container">
+					<h3>제목</h3>
+					<input type="text" id="title-input" name="title" value="<%= article.title %>" required />
+				</div>
+				<div class="container">
+					<h3>내용</h3>
+					<textarea id="content-input" name="content" rows="5" required><%= article.content %></textarea>
+				</div>
+				<button type="submit" id="submit">기사 업데이트하기</button>
+			</form>
+			<a href="/articles/<%= article.id %>"><button id="cancel">취소</button></a>
+		</div>
 	</body>
 </html>

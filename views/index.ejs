@@ -17,7 +17,7 @@
 			<li class="main-news">
 				<p><%= article.content.length > 100 ? article.content.substring(0, 50) + '...' : article.content %></p>
 				<% if (article.image) { %>
-				<img src="<%= article.image %>" alt="<%= article.title %>" width="300" />
+				<img src="<%= article.filePath %>" alt="<%= article.title %>" width="300" />
 				<% } %>
 				<p><%= article.createdAtFormatted %> <%= article.author_name %> 기자</p>
 			</li>
@@ -42,7 +42,7 @@
 					<li>
 						<div class="sub">
 							<div class="category"><%= article.category %></div>
-							<a href="/article/<%= article.id %>"><%= article.title %></a>
+							<a href="/articles/<%= article.id %>"><%= article.title %></a>
 							<!-- - <small><%= article.timeAgo %></small> -->
 							<!-- 서버에서 넘겨준 시간 차이 표시 -->
 						</div>

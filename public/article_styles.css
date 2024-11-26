@@ -1,7 +1,6 @@
 /* 전체 폰트 설정 */
 body {
 	font-family: Arial, sans-serif;
-	color: #333;
 	margin: 0;
 	padding: 0;
 }
@@ -25,33 +24,17 @@ main {
 }
 
 /* 제목 스타일 */
-h2 {
+h1 {
 	text-align: center;
-	font-size: 40px;
-	color: #000000;
-	margin-top: 20px;
-}
-
-/* 서브 타이틀 */
-.main-title {
-	font-size: 15px;
-	color: #7f8c8d;
-	text-align: center;
-	margin-bottom: 10px;
+	font-size: 3.95em;
+	font-weight: 700;
+	padding: 0.3em;
+	padding-bottom: 0;
 }
 
 /* 카테고리와 타이틀 */
 .categoryandtitle {
 	font-size: 15px;
-	color: #7f8c8d;
-	text-align: center;
-	margin-bottom: 10px;
-}
-
-/* 카테고리 */
-.categoryandtitle {
-	font-size: 15px;
-	color: #7f8c8d;
 	text-align: center;
 	margin-bottom: 10px;
 }

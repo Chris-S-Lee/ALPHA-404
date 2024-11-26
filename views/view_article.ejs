@@ -20,17 +20,17 @@
 			<!-- 기사 내용 영역 -->
 			<main>
 				<div class="categoryandtitle">
-					<li>
-						<a href="/articles/category/<%= article.category %>" class="categoryman">
-							<%= article.category %>
-						</a>
-					</li>
-					<h2><%= article.title %></h2>
-					<p class="main-title"><strong><%= article.author_name %> 기자</strong></p>
+
+					<h1><%= article.title %></h1>
+					<p class="main-title">
+						<%= article.author_name %> 기자  |  <a href="/articles/category/<%= article.category %>" class="categoryman">
+						<%= article.category %>
+					</a>
+				</p>
 				</div>
 			<!-- 기사를 쓴 날짜 추가 -->
 			<p class="article-date-and-actions">
-				<span class="article-date"><%= article.createdAtFormatted %></span>
+				<span class="article-date">업로드: 	<%= article.createdAtFormatted %></span>
 				<div class="action-buttons">
 					<% if (article.author_id === userId) { %>
 						<a href="/articles/<%= article.id %>/edit" class="icon-button" title="Edit">
