@@ -30,7 +30,8 @@
 				</div>
 			<!-- 기사를 쓴 날짜 추가 -->
 			<p class="article-date-and-actions">
-				<span class="article-date">업로드: 	<%= article.createdAtFormatted %></span>
+				<p class="article-date" id="no-padding">업로드: 	<%= article.createdAtFormatted %></p>
+				<p id="no-padding">조회수: <%= article.views %>회</p>
 				<div class="action-buttons">
 					<% if (article.author_id === userId) { %>
 						<a href="/articles/<%= article.id %>/edit" class="icon-button" title="Edit">
@@ -52,8 +53,7 @@
 					</button>
 				</div>
 			</p>
-				
-				<p><%= article.views %>회</p>
+
 				<hr />
 				<!-- 기사 내용 -->
 				<p><%- article.content %></p>
