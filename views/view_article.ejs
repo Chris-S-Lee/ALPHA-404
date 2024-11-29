@@ -35,31 +35,29 @@
 						<div>업로드: 	<%= article.createdAtFormatted %></div>
 						<div id="no-padding">조회수: <%= article.views %>회</div>
 					</div>
-					<div>
-						여기에 링크 복붙 추가하기
-					</div>
-				</div>
-				<!-- <p id="no-padding">조회수: <%= article.views %>회</p> -->
-				<div class="action-buttons">
-					<% if (article.author_id === userId) { %>
-						<a href="/articles/<%= article.id %>/edit" class="icon-button" title="Edit">
-							<i class="fas fa-edit"></i>
-						</a>
-						<form
-							action="/articles/<%= article.id %>/delete"
-							method="POST"
-							style="display: inline;"
-							title="Delete"
-						>
-							<button type="submit" class="icon-button-delete">
-								<i class="fas fa-trash-alt"></i>
+						<div class="action-buttons">
+							<% if (article.author_id === useId) { %>
+								<a href="/articles/<%= article.id %>/edit" class="icon-button" title="Edit">
+									<i class="fas fa-edit"></i>
+								</a>
+								<form
+									action="/articles/<%= article.id %>/delete"
+									method="POST"
+									style="display: inline;"
+									title="Delete"
+								>
+									<button type="submit" class="icon-button-delete">
+										<i class="fas fa-trash-alt"></i>
+									</button>
+								</form>
+							<% } %>
+							<button onclick="copyLink()" class="icon-button" title="Share">
+								<i class="fas fa-share-alt"></i>
 							</button>
-						</form>
-					<% } %>
-					<button onclick="copyLink()" class="icon-button" title="Share">
-						<i class="fas fa-share-alt"></i>
-					</button>
-				</div>
+						</div>
+					</div>
+				
+				
 			</p>
 
 				<hr />

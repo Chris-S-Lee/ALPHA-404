@@ -314,6 +314,10 @@ app.use("/uploads", express.static("uploads"));
 app.get("/articles/:id", async (req, res) => {
 	const articleId = req.params.id;
 	try {
+		let userId = req.session.userId; // 세션에서 userId 가져오기
+		if (!userId || userId === "undefined") {
+			userId = "none";
+		}
 		await db.query("UPDATE articles SET views = views + 1 WHERE id = ?", [articleId]);
 		console.log(`Views incremented for article ID: ${articleId}`);
 
@@ -334,7 +338,7 @@ app.get("/articles/:id", async (req, res) => {
 		const article = results[0];
 		article.createdAtFormatted = moment(article.created_at).format("YYYY-MM-DD HH:mm");
 
-		res.render("view_article", { article, userId: req.session.userId });
+		res.render("view_article", { article, useId: req.session.userId, userId });
 	} catch (err) {
 		console.error("Error fetching article:", err);
 		res.status(500).send("Failed to load article");
