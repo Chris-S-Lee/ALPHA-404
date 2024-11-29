@@ -91,16 +91,7 @@ function formatTime(createdAt, format = "YYYY-MM-DD HH:mm") {
 
 // 로그인 페이지를 위한 GET 라우트
 app.get("/login", (req, res) => {
-	try {
-		const userId = req.session.userId; // 세션에서 userId 가져오기
-		if (!userId) {
-			res.render("login");
-		}
-		res.status(200).json({ userId });
-	} catch (err) {
-		console.error("Error fetching userId:", err);
-		res.status(500).json({ message: "Failed to fetch userId" });
-	}
+	res.render("login");
 });
 
 // 로그인 요청 처리를 위한 POST 라우트
@@ -148,9 +139,8 @@ app.get("/logout", (req, res) => {
 });
 
 app.get("/", async (req, res) => {
-	if (req.session.userId) {
-		try {
-			const [articles] = await db.query(`
+	try {
+		const [articles] = await db.query(`
 							SELECT 
 									articles.id, 
 									articles.title, 
@@ -163,27 +153,30 @@ app.get("/", async (req, res) => {
 							ORDER BY articles.created_at DESC
 					`);
 
-			const articlesArray = articles.map((article) => {
-				article.timeAgo = timeAgo(article.created_at);
-				return article;
-			});
-			const latestArticles = [...articlesArray].slice(0, 10);
-			const topArticles = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 5);
-			const mainArticle = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 1);
-			const userId = req.session.userId; // 세션에서 userId 가져오기
-			if (!userId) {
-				res.render("index", {
-					articles: articlesArray,
-					latestArticles,
-					topArticles,
-					mainArticle,
-				});
-			}
-			res.status(200).json({ userId });
-		} catch (err) {
-			console.error("Error fetching articles:", err);
-			res.status(500).send("기사를 불러오지 못합니다.");
+		const articlesArray = articles.map((article) => {
+			article.timeAgo = timeAgo(article.created_at);
+			return article;
+		});
+		const latestArticles = [...articlesArray].slice(0, 10);
+		const topArticles = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 5);
+		const mainArticle = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 1);
+		let userId = req.session.userId; // 세션u에서 userId 가져오기
+		console.log("세션 : ", !userId || userId === "undefined");
+
+		if (!userId || userId === "undefined") {
+			userId = "none";
 		}
+
+		res.render("index", {
+			articles: articlesArray,
+			latestArticles,
+			topArticles,
+			mainArticle,
+			userId,
+		});
+	} catch (err) {
+		console.error("Error fetching articles:", err);
+		res.status(500).send("기사를 불러오지 못합니다.");
 	}
 });
 
@@ -213,11 +206,11 @@ app.post("/register", async (req, res) => {
 // 게시글 작성 폼을 렌더링하는 GET 라우트 (로그인 확인)
 app.get("/articles/new", isAuthenticated, (req, res) => {
 	try {
-		const userId = req.session.userId; // 세션에서 userId 가져오기
-		if (!userId) {
-			res.render("new_article");
+		let userId = req.session.userId; // 세션에서 userId 가져오기
+		if (!userId || userId === "undefined") {
+			userId = "none";
 		}
-		res.status(200).json({ userId });
+		res.render("new_article", { userId });
 	} catch (err) {
 		console.error("Error fetching userId:", err);
 		res.status(500).json({ message: "Failed to fetch userId" });
@@ -253,11 +246,11 @@ app.get("/articles/:id/edit", isAuthenticated, async (req, res) => {
 		if (results.length === 0) {
 			return res.status(403).send("Unauthorized to edit this article");
 		}
-		const userId = req.session.userId; // 세션에서 userId 가져오기
-		if (!userId) {
-			res.render("edit_article", { article: results[0] });
+		let userId = req.session.userId; // 세션에서 userId 가져오기
+		if (!userId || userId === "undefined") {
+			userId = "none";
 		}
-		res.status(200).json({ userId });
+		res.render("edit_article", { article: results[0], userId });
 	} catch (err) {
 		console.error("Error during article edit fetch:", err);
 		res.status(500).send("Failed to retrieve article");
@@ -304,11 +297,11 @@ app.get("/articles/category/:category", async (req, res) => {
 	const category = req.params.category;
 	try {
 		const [articles] = await db.query("SELECT * FROM articles WHERE category = ? ORDER BY created_at DESC", [category]);
-		const userId = req.session.userId; // 세션에서 userId 가져오기
-		if (!userId) {
-			res.render("category_articles", { articles, category });
+		let userId = req.session.userId; // 세션에서 userId 가져오기
+		if (!userId || userId === "undefined") {
+			userId = "none";
 		}
-		res.status(200).json({ userId });
+		res.render("category_articles", { articles, category, userId });
 	} catch (err) {
 		console.error("Error fetching articles by category:", err);
 		res.status(500).send("Failed to load articles by category");

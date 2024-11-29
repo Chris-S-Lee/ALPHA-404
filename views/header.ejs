@@ -21,7 +21,7 @@
 				</ul>
 			</div>
 			<div class="grid-item" id="profile">
-				<a href="/login" id="link"><i class="fas fa-user" id="icon"></i></a>
+				<a href="/login" id="link"><i class="" id="icon"></i></a>
 				<a href="/logout" id="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
 			</div>
 		</div>
@@ -31,22 +31,16 @@
 <script>
 	const iconElement = document.getElementById("icon");
 	const linkElement = document.getElementById("link");
-
+	const serverUserID = "<%= userId %>";
+	console.log("userid : ", serverUserID);
 	// API 호출 및 처리
-	fetch("/api/authorId")
-		.then((response) => response.json())
-		.then((data) => {
-			if (data.authorId === null || data.authorId === undefined) {
-				// Null인 경우 1번 아이콘과 링크를 표시
-				iconElement.className = "fas fa-user"; // 1번 아이콘의 경로
-				linkElement.href = "/login"; // 1번 링크
-			} else {
-				// Null이 아닌 경우 2번 아이콘과 링크를 표시
-				iconElement.className = "fas fa-bars"; // 1번 아이콘의 경로
-				linkElement.href = "/profile"; // 2번 링크
-			}
-		})
-		.catch((error) => {
-			console.error("Error fetching authorId:", error);
-		});
+	if (serverUserID == "none") {
+		// Null인 경우 1번 아이콘과 링크를 표시
+		iconElement.className = "fas fa-user"; // 1번 아이콘의 경로
+		linkElement.href = "/login"; // 1번 링크
+	} else {
+		// Null이 아닌 경우 2번 아이콘과 링크를 표시
+		iconElement.className = "fas fa-bars"; // 1번 아이콘의 경로
+		linkElement.href = "/profile"; // 2번 링크
+	}
 </script>
