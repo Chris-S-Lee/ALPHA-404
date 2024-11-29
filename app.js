@@ -185,21 +185,20 @@ app.get("/register", (req, res) => {
 	res.render("register");
 });
 
-// 회원가입 요청 처리를 위한 POST 라우트
 app.post("/register", async (req, res) => {
 	const { username, password } = req.body;
-	const hashedPassword = await bcrypt.hash(password, 10);
 
 	try {
-		await db.query("INSERT INTO users (username, password) VALUES (?, ?)", [username, hashedPassword]);
-		res.render("registration_success", { username });
-	} catch (err) {
-		if (err.code === "ER_DUP_ENTRY") {
-			res.status(409).render("already_exists");
-		} else {
-			console.error("Error during registration:", err);
-			res.status(500).render("registration_failed");
+		const [existingUsername] = await db.query("SELECT * FROM users WHERE username = ?", [username]);
+		if (existingUsername.length > 0) {
+			return res.status(400).render("already_exists");
 		}
+		const hashedPassword = await bcrypt.hash(password, 10);
+		await db.query("INSERT INTO users (username, password) VALUES (?, ?)", [username, hashedPassword]);
+		res.status(200).render("registration_success");
+	} catch (err) {
+		console.error("Error during registration:", err);
+		return res.status(500).render("registration_failed");
 	}
 });
 
