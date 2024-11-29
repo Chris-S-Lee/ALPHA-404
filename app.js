@@ -91,7 +91,16 @@ function formatTime(createdAt, format = "YYYY-MM-DD HH:mm") {
 
 // 로그인 페이지를 위한 GET 라우트
 app.get("/login", (req, res) => {
-	res.render("login");
+	try {
+		const userId = req.session.userId; // 세션에서 userId 가져오기
+		if (!userId) {
+			res.render("login");
+		}
+		res.status(200).json({ userId });
+	} catch (err) {
+		console.error("Error fetching userId:", err);
+		res.status(500).json({ message: "Failed to fetch userId" });
+	}
 });
 
 // 로그인 요청 처리를 위한 POST 라우트
@@ -158,114 +167,23 @@ app.get("/", async (req, res) => {
 				article.timeAgo = timeAgo(article.created_at);
 				return article;
 			});
-
-			const head = `<!DOCTYPE html>
-			<html>
-				<head>
-					<meta charset="utf-8" />
-					<link rel="stylesheet" href="/public/header_styles.css" />
-					<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-					<script src="https://kit.fontawesome.com/a914ae0fb8.js" crossorigin="anonymous"></script>
-				</head>
-				<body>
-					<a href="/" class="title-bar"><img src="/public/logo.png" /></a>
-					<div class="grid-container">
-						<div class="grid-item" id="upload">
-							<a href="/articles/new"><i class="fas fa-pen-fancy"></i></a>
-						</div>
-						<div class="grid-item">
-							<ul>
-								<li><a href="/articles/category/사회" class="block">사회</a></li>
-								<li><a href="/articles/category/문화" class="block">문화</a></li>
-								<li><a href="/articles/category/국제" class="block">국제</a></li>
-								<li><a href="/articles/category/교육" class="block">교육</a></li>
-							</ul>
-						</div>
-						<div class="grid-item" id="profile">
-							<a href="/profile"><i class="fas fa-bars"></i></a>
-							<a href="/logout" id="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
-						</div>
-					</div>
-				</body>
-			</html>`;
-
 			const latestArticles = [...articlesArray].slice(0, 10);
 			const topArticles = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 5);
 			const mainArticle = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 1);
-			res.render("index", {
-				articles: articlesArray,
-				latestArticles,
-				topArticles,
-				mainArticle,
-				head,
-			});
+			const userId = req.session.userId; // 세션에서 userId 가져오기
+			if (!userId) {
+				res.render("index", {
+					articles: articlesArray,
+					latestArticles,
+					topArticles,
+					mainArticle,
+				});
+			}
+			res.status(200).json({ userId });
 		} catch (err) {
 			console.error("Error fetching articles:", err);
 			res.status(500).send("기사를 불러오지 못합니다.");
 		}
-	}
-	try {
-		const [articles] = await db.query(`
-						SELECT 
-								articles.id, 
-								articles.title, 
-								articles.content, 
-								articles.created_at, 
-								articles.views, 
-								users.username AS author_name 
-						FROM articles 
-						JOIN users ON articles.author_id = users.id
-						ORDER BY articles.created_at DESC
-				`);
-
-		const articlesArray = articles.map((article) => {
-			article.timeAgo = timeAgo(article.created_at);
-			return article;
-		});
-
-		const head = `<!DOCTYPE html>
-			<html>
-				<head>
-					<meta charset="utf-8" />
-					<link rel="stylesheet" href="/public/header_styles.css" />
-					<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-					<script src="https://kit.fontawesome.com/a914ae0fb8.js" crossorigin="anonymous"></script>
-				</head>
-				<body>
-					<a href="/" class="title-bar"><img src="/public/logo.png" /></a>
-					<div class="grid-container">
-						<div class="grid-item" id="upload">
-							<a href="/articles/new"><i class="fas fa-pen-fancy"></i></a>
-						</div>
-						<div class="grid-item">
-							<ul>
-								<li><a href="/articles/category/사회" class="block">사회</a></li>
-								<li><a href="/articles/category/문화" class="block">문화</a></li>
-								<li><a href="/articles/category/국제" class="block">국제</a></li>
-								<li><a href="/articles/category/교육" class="block">교육</a></li>
-							</ul>
-						</div>
-						<div class="grid-item" id="profile">
-							<a href="/login"><i class="fas fa-user"></i></a>
-							<a href="/logout" id="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
-						</div>
-					</div>
-				</body>
-			</html>`;
-
-		const latestArticles = [...articlesArray].slice(0, 10);
-		const topArticles = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 5);
-		const mainArticle = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 1);
-		res.render("index", {
-			head,
-			articles: articlesArray,
-			latestArticles,
-			topArticles,
-			mainArticle,
-		});
-	} catch (err) {
-		console.error("Error fetching articles:", err);
-		res.status(500).send("기사를 불러오지 못합니다.");
 	}
 });
 
@@ -294,7 +212,16 @@ app.post("/register", async (req, res) => {
 
 // 게시글 작성 폼을 렌더링하는 GET 라우트 (로그인 확인)
 app.get("/articles/new", isAuthenticated, (req, res) => {
-	res.render("new_article");
+	try {
+		const userId = req.session.userId; // 세션에서 userId 가져오기
+		if (!userId) {
+			res.render("new_article");
+		}
+		res.status(200).json({ userId });
+	} catch (err) {
+		console.error("Error fetching userId:", err);
+		res.status(500).json({ message: "Failed to fetch userId" });
+	}
 });
 
 // 게시글 작성 요청을 처리하는 POST 라우트
@@ -326,7 +253,11 @@ app.get("/articles/:id/edit", isAuthenticated, async (req, res) => {
 		if (results.length === 0) {
 			return res.status(403).send("Unauthorized to edit this article");
 		}
-		res.render("edit_article", { article: results[0] });
+		const userId = req.session.userId; // 세션에서 userId 가져오기
+		if (!userId) {
+			res.render("edit_article", { article: results[0] });
+		}
+		res.status(200).json({ userId });
 	} catch (err) {
 		console.error("Error during article edit fetch:", err);
 		res.status(500).send("Failed to retrieve article");
@@ -373,7 +304,11 @@ app.get("/articles/category/:category", async (req, res) => {
 	const category = req.params.category;
 	try {
 		const [articles] = await db.query("SELECT * FROM articles WHERE category = ? ORDER BY created_at DESC", [category]);
-		res.render("category_articles", { articles, category });
+		const userId = req.session.userId; // 세션에서 userId 가져오기
+		if (!userId) {
+			res.render("category_articles", { articles, category });
+		}
+		res.status(200).json({ userId });
 	} catch (err) {
 		console.error("Error fetching articles by category:", err);
 		res.status(500).send("Failed to load articles by category");
