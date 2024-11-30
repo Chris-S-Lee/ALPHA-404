@@ -8,12 +8,12 @@
 		<%-include("header.ejs") %>
 		<h1><%= user.username %>'s Profile</h1>
 		<p><strong>Bio:</strong> <%= user.bio || "No bio yet." %></p>
-
 		<% if (sessionId === user.id ) { %>
+		<h2>여기 원래 자기소개 수정 폼이 떠야됨</h2>
 		<!-- 자기소개 수정 폼 -->
 		<form action="/profile/<%= user.id %>" method="POST">
-			<input type="text" id="id-input" name="id" value="<%= use.id %>" required />
-			<input type="text" id="pw-input" name="pw" value="<%= use.pw %>" required />
+			<input type="text" id="id-input" name="id" value="<%= user.id %>" required />
+			<input type="text" id="pw-input" name="pw" value="<%= user.pw %>" required />
 			<textarea name="bio" rows="4" cols="50"><%= user.bio %></textarea>
 			<button type="submit">프로필 수정</button>
 		</form>

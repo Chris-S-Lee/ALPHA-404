@@ -233,7 +233,7 @@ app.get("/profile/:id", async (req, res) => {
 			sessionId = "none";
 		}
 		// SQL 쿼리를 사용하여 사용자 정보 가져오기
-		const [userinfo] = await db.query("SELECT username, email, password, bio FROM users WHERE id = ?", [userId]);
+		const [userinfo] = await db.query("SELECT * FROM users WHERE id = ?", [userId]);
 		const [articles] = await db.query("SELECT * FROM articles WHERE author_id = ? ", [userId]);
 
 		if (userinfo.length === 0) {
