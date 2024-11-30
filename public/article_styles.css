@@ -83,6 +83,7 @@ p {
 	display: grid;
 	grid-template-columns: auto auto;
 	padding: 10px 0;
+	padding-bottom: 0;
 	margin: 0;
 	font-size: 1.4em;
 }
@@ -170,4 +171,9 @@ hr {
 img {
 	max-width: 100%;
 	height: auto;
+}
+
+.content-container {
+	margin-left: 10em;
+	margin-right: 10em;
 }

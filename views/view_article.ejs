@@ -14,52 +14,45 @@
 			<!-- 기사 내용 영역 -->
 			<main>
 				<div class="categoryandtitle">
-
 					<h1><%= article.title %></h1>
 					<p class="main-title">
-						<a href="/articles/category/<%= article.category %>" class="categoryman"><%= article.category %></a>&nbsp;&nbsp;|&nbsp;&nbsp;<%= article.author_name %> 기자
-				</p>
+						<a href="/articles/category/<%= article.category %>" class="categoryman"><%= article.category %></a>&nbsp;&nbsp;|&nbsp;&nbsp;<%= article.author_name
+						%> 기자
+					</p>
 				</div>
-			<!-- 기사를 쓴 날짜 추가 -->
-			<p class="article-date-and-actions">
+				<!-- 기사를 쓴 날짜 추가 -->
 				<div class="article-date">
 					<div>
-						<div>업로드: 	<%= article.createdAtFormatted %></div>
+						<div>업로드: <%= article.createdAtFormatted %></div>
 						<div id="no-padding">조회수: <%= article.views %>회</div>
 					</div>
-						<div class="action-buttons">
-							<% if (article.author_id === useId) { %>
-								<a href="/articles/<%= article.id %>/edit" class="icon-button" title="Edit">
-									<i class="fas fa-edit"></i>
-								</a>
-								<form
-									action="/articles/<%= article.id %>/delete"
-									method="POST"
-									style="display: inline;"
-									title="Delete"
-								>
-									<button type="submit" class="icon-button-delete">
-										<i class="fas fa-trash-alt"></i>
-									</button>
-								</form>
-							<% } %>
-							<button onclick="copyLink()" class="icon-button" title="Share">
-								<i class="fas fa-share-alt"></i>
+					<div class="action-buttons">
+						<% if (article.author_id === useId) { %>
+						<a href="/articles/<%= article.id %>/edit" class="icon-button" title="Edit">
+							<i class="fas fa-edit"></i>
+						</a>
+						<form action="/articles/<%= article.id %>/delete" method="POST" style="display: inline" title="Delete">
+							<button type="submit" class="icon-button-delete">
+								<i class="fas fa-trash-alt"></i>
 							</button>
-						</div>
+						</form>
+						<% } %>
+						<button onclick="copyLink()" class="icon-button" title="Share">
+							<i class="fas fa-share-alt"></i>
+						</button>
 					</div>
-				
-				
-			</p>
+				</div>
 
 				<hr />
 				<!-- 기사 내용 -->
-				<p><%- article.content %></p>
-				<% if (article.attachment) { %>
+				<div class="content-container">
+					<p><%- article.content %></p>
+					<% if (article.attachment) { %>
 					<div>
-							<img src="/<%= article.attachment %>">
+						<img src="/<%= article.attachment %>" />
 					</div>
-			<% } %>
+					<% } %>
+				</div>
 			</main>
 		</div>
 		<hr />
