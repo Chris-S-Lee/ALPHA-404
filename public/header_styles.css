@@ -58,7 +58,7 @@ a {
 }
 .grid-container {
 	display: grid;
-	grid-template-columns: 15em auto 15em;
+	grid-template-columns: 10em auto 10em;
 	padding: 1em;
 	border-bottom: black 0.1875em solid;
 }

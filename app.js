@@ -65,6 +65,15 @@ function isAuthenticated(req, res, next) {
 	res.status(401).send("You need to log in");
 }
 
+// 날짜 포맷 함수 추가
+function formatDate(dateString) {
+	const date = new Date(dateString);
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, "0"); // 월 2자리 포맷
+	const day = String(date.getDate()).padStart(2, "0"); // 일 2자리 포맷
+	return `${year}년 ${month}월 ${day}일`;
+}
+
 // 시간 차이 계산 함수 (서버에서 처리)
 function timeAgo(createdAt) {
 	const now = new Date();
@@ -147,22 +156,22 @@ app.get("/", async (req, res) => {
 									articles.content, 
 									articles.category, 
 									articles.created_at, 
-									articles.views, 
+									articles.views,
+									articles.attachment,
 									users.username AS author_name 
 							FROM articles 
 							JOIN users ON articles.author_id = users.id
 							ORDER BY articles.created_at DESC
 					`);
-
 		const articlesArray = articles.map((article) => {
-			article.timeAgo = timeAgo(article.created_at);
+			article.timeAgo = timeAgo(article.created_at); // 기존 상대시간
+			article.createdAtFormatted = formatDate(article.created_at); // 포맷된 날짜 추가
 			return article;
 		});
 		const latestArticles = [...articlesArray].slice(0, 10);
 		const topArticles = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 5);
 		const mainArticle = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 1);
 		let userId = req.session.userId; // 세션u에서 userId 가져오기
-		console.log("세션 : ", !userId || userId === "undefined");
 
 		if (!userId || userId === "undefined") {
 			userId = "none";

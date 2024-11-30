@@ -16,10 +16,12 @@
 				<h1 class="main-title"><a href="/articles/<%= article.id %>"><%= article.title %></a></h1>
 			</li>
 			<li class="main-news">
-				<%- article.content.length > 100 ? article.content.substring(0, 50) + '...' : article.content %> <% if (article.image) { %>
-				<img src="<%= article.filePath %>" alt="<%= article.title %>" width="300" />
+				<div class="article-container">
+					<p><%- article.content.length > 100 ? article.content.substring(0, 50) + '...' : article.content %> <% if (article.attachment) { %></p>
+					<p><%= article.createdAtFormatted %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= article.author_name %> 기자</p>
+				</div>
+				<img src="/<%= article.attachment %>" alt="<%= article.title %>" width="300" />
 				<% } %>
-				<p><%= article.createdAtFormatted %> <%= article.author_name %> 기자</p>
 			</li>
 			<% }) %>
 		</ul>

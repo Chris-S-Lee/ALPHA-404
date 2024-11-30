@@ -72,6 +72,17 @@ h1 {
 	margin-right: auto;
 }
 
+.article-container {
+	display: flex;
+	flex-direction: column; /* 수직 정렬 */
+	justify-content: space-between; /* 위와 아래 요소 간 간격 조정 */
+	height: 100%; /* 부모 높이에 맞춰 확장 */
+}
+
+.article-container p:last-child {
+	margin-top: auto; /* 위쪽 공간을 밀어 하단으로 배치 */
+}
+
 .others {
 	display: grid;
 	grid-template-columns: 65% 35%;
