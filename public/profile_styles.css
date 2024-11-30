@@ -35,98 +35,70 @@ body {
 	margin-top: 0;
 	padding: 0;
 	list-style: none;
-	/* background-image: url("bg.jpg"); */
 }
 a {
 	color: black;
 	text-decoration: none;
 }
-h1 {
+.info {
+	margin-left: 2em;
+	margin-right: 2em;
+	font-size: 24px;
 	text-align: center;
-	font-size: 4em;
-	font-weight: 700;
-	padding: 0.6em;
-	padding-bottom: 0;
 }
-.main-news {
+.container {
 	display: grid;
-	grid-template-columns: 50% 50%;
-	padding: 1em;
-	padding-top: 1.5em;
-	padding-bottom: 1.5em;
-	border-bottom: darkgray 0.15em solid;
+	margin: 1em;
+	grid-template-columns: 7em auto;
 }
-.main-news p {
-	font-size: 2.0064em;
-	line-height: 1.3;
-	padding: 0.2em;
-
-	text-align: justify;
-}
-.main-news img {
-	padding: 0.2em;
-	width: 100%;
-	text-align: center;
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.article-container {
-	display: flex;
-	flex-direction: column; /* 수직 정렬 */
-	justify-content: space-between; /* 위와 아래 요소 간 간격 조정 */
-	height: 100%; /* 부모 높이에 맞춰 확장 */
-}
-
-.article-container p:last-child {
-	margin-top: auto; /* 위쪽 공간을 밀어 하단으로 배치 */
-}
-
-.others {
-	display: grid;
-	grid-template-columns: 65% 35%;
-	margin-right: 1em;
-	padding-top: 0;
-	padding-left: 0;
-	border-bottom: darkgray 0.15em solid;
-}
-
-.others-title div {
+h3 {
 	text-align: left;
-	padding-top: 0.8em;
-	padding-bottom: 0.8em;
+	font-family: KD;
+	font-weight: 700;
+}
+.profile-container {
+	text-align: center;
+}
+
+#photo {
+	margin-top: 4em;
+	width: 16em; /* 원하는 너비 */
+	height: 16em; /* 원하는 높이 */
+	border-radius: 50%; /* 모서리를 둥글게 */
+	object-fit: cover; /* 이미지 비율 유지하며 채우기 */
+}
+
+.name {
+	margin-top: 0.7em;
+}
+
+.icon-button {
+	align-items: center;
+}
+
+#bio {
+	margin: 0.5em;
+	margin-top: 1.1em;
+	font-style: italic;
+	color: green;
+}
+
+.news-container {
+	margin-left: 10em;
+	margin-right: 10em;
+	margin-top: 2em;
+	border-top: gray 0.05em solid;
+}
+
+.news-container ul li {
+	text-align: left;
+	padding-top: 0.7em;
+	padding-bottom: 0.7em;
 	padding-left: 0.6em;
 	font-size: 2em;
-	border-bottom: darkgray 0.05em solid;
-}
-
-#last {
-	border-bottom: none;
 }
 
 #when {
 	color: darkgray;
 	font-size: 0.7em;
-}
-.top-news {
-	padding: 1em;
-	padding-right: 0;
-	font-size: 2em;
-	text-align: left;
-	/* border-bottom: darkgray 0.05em solid; */
-}
-.top-news h3 {
-	text-align: left;
-	margin-bottom: 0.3em;
-}
-.sub {
-	padding-top: 0.8em;
-}
-.category {
-	color: green;
-	margin-bottom: 0.1em;
-}
-a:hover {
-	color: gray;
 }

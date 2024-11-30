@@ -2,33 +2,40 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
+		<link rel="stylesheet" href="/public/profile_styles.css" />
 		<title>Profile</title>
 	</head>
 	<body>
 		<%-include("header.ejs") %>
-		<h1><%= user.username %>'s Profile</h1>
-		<p><strong>Bio:</strong> <%= user.bio || "No bio yet." %></p>
-		<% if (sessionId === user.id ) { %>
-		<h2>여기 원래 자기소개 수정 폼이 떠야됨</h2>
-		<!-- 자기소개 수정 폼 -->
-		<form action="/profile/<%= user.id %>" method="POST">
-			<input type="text" id="id-input" name="id" value="<%= user.id %>" required />
-			<input type="text" id="pw-input" name="pw" value="<%= user.pw %>" required />
-			<textarea name="bio" rows="4" cols="50"><%= user.bio %></textarea>
-			<button type="submit">프로필 수정</button>
-		</form>
-		<% } %>
+		<!-- <img src="<%= user.photo %>" alt="profile image" id="photo" /> -->
+		<div class="profile-container">
+			<img
+				src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
+				alt="profile image"
+				id="photo" />
+			<div class="name">
+				<h1 style="display: inline"><%= user.username %> 기자</h1>
+				<% if (sessionId === user.id ) { %>
+				<!-- 자기소개 수정 아이콘 -->
+				<a href="/profile/<%= user.id %>/edit" class="icon-button" title="Edit" style="display: inline">
+					<i class="fas fa-edit"></i>
+				</a>
+				<% } %>
+			</div>
+			<p id="bio">"<%= user.bio || "No bio yet." %>"</p>
+		</div>
 
-		<h2>Articles</h2>
-		<ul>
-			<% articles.forEach(article => { %>
-			<li>
-				<a href="/articles/<%= article.id %>">[<%= article.category %>] <%= article.title %></a>
-				<%= article.createdAtFormatted %>
-			</li>
-			<br />
+		<div class="news-container">
+			<ul>
+				<% articles.forEach(article => { %>
+				<li>
+					<a href="/articles/<%= article.id %>">[<%= article.category %>] <%= article.title %></a>
+					<span id="when">&nbsp<%= article.createdAtFormatted %></span>
+				</li>
+				<hr />
 
-			<% }) %>
-		</ul>
+				<% }) %>
+			</ul>
+		</div>
 	</body>
 </html>

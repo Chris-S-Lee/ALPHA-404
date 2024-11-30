@@ -32,6 +32,7 @@
 				<div>
 					<li>
 						<a href="/articles/<%= article.id %>"> <%= article.title %> </a>
+						<span id="when">&nbsp<%= article.createdAtFormatted %></span>
 					</li>
 				</div>
 				<% }) %>
