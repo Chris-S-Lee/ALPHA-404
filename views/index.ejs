@@ -17,7 +17,7 @@
 			</li>
 			<li class="main-news">
 				<div class="article-container">
-					<p><%- article.content.length > 100 ? article.content.substring(0, 50) + '...' : article.content %> <% if (article.attachment) { %></p>
+					<p><%- article.content.length > 280 ? article.content.substring(0, 280) + '...' : article.content %> <% if (article.attachment) { %></p>
 					<p><%= article.createdAtFormatted %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= article.author_name %> 기자</p>
 				</div>
 				<img src="/<%= article.attachment %>" alt="<%= article.title %>" width="300" />

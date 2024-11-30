@@ -85,7 +85,7 @@ h1 {
 
 .others {
 	display: grid;
-	grid-template-columns: 65% 35%;
+	grid-template-columns: auto auto;
 	margin-right: 1em;
 	padding-top: 0;
 	padding-left: 0;

@@ -222,6 +222,7 @@ app.post("/registratoin_success", async (req, res) => {
 
 	res.render("registratoin_success", usernameId);
 });
+
 //프로필 페이지를 위한 GET 라우트
 app.get("/profile/:id", async (req, res) => {
 	const userId = req.params.id; // URL에서 사용자 ID 추출
