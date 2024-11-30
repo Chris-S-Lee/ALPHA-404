@@ -63,6 +63,11 @@
 				<hr />
 				<!-- 기사 내용 -->
 				<p><%- article.content %></p>
+				<% if (article.attachment) { %>
+					<div>
+							<img src="/<%= article.attachment %>">
+					</div>
+			<% } %>
 			</main>
 		</div>
 		<hr />

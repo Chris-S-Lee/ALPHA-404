@@ -206,3 +206,8 @@ hr {
 	height: 100%;
 	cursor: pointer;
 }
+
+img {
+	max-width: 100%;
+	height: auto;
+}

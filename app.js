@@ -230,6 +230,8 @@ app.post("/articles", isAuthenticated, upload.single("attachment"), async (req, 
 			category,
 			filePath,
 		]);
+		console.log(`filePath : ${filePath}`);
+
 		res.redirect("/");
 	} catch (err) {
 		console.error("Error during article creation:", err);
