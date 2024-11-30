@@ -145,6 +145,7 @@ app.get("/", async (req, res) => {
 									articles.id, 
 									articles.title, 
 									articles.content, 
+									articles.category, 
 									articles.created_at, 
 									articles.views, 
 									users.username AS author_name 
