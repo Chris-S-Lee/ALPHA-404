@@ -212,6 +212,16 @@ app.post("/register", async (req, res) => {
 	}
 });
 
+app.post("/registratoin_success", async (req, res) => {
+	let sessionId = req.session.userId; // 세션에서 userId 가져오기
+
+	if (!sessionId || sessionId === "undefined") {
+		sessionId = "none";
+	}
+	const usernameId = await db.query("SELECT username, FROM users WHERE id = ?", [userId]);
+
+	res.render("registratoin_success", usernameId);
+});
 //프로필 페이지를 위한 GET 라우트
 app.get("/profile/:id", async (req, res) => {
 	const userId = req.params.id; // URL에서 사용자 ID 추출
