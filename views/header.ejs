@@ -10,7 +10,7 @@
 		<a href="/" class="title-bar"><img src="/public/logo.png" /></a>
 		<div class="grid-container">
 			<div class="grid-item" id="upload">
-				<a href="/articles/new"><i class="fas fa-pen-fancy"></i></a>
+				<a href="/articles/new" id="writersLink"><i class="fas fa-pen-fancy"></i></a>
 			</div>
 			<div class="grid-item">
 				<ul>
@@ -31,6 +31,7 @@
 <script>
 	const iconElement = document.getElementById("icon");
 	const linkElement = document.getElementById("link");
+	const writerLink = document.getElementById("writersLink");
 	const serverUserID = "<%= sessionId %>";
 	console.log("userid : ", serverUserID);
 	// API 호출 및 처리
@@ -38,9 +39,11 @@
 		// Null인 경우 1번 아이콘과 링크를 표시
 		iconElement.className = "fas fa-user"; // 1번 아이콘의 경로
 		linkElement.href = "/login"; // 1번 링크
+		writerLink.href = "/profiles";
 	} else {
 		// Null이 아닌 경우 2번 아이콘과 링크를 표시
 		iconElement.className = "fas fa-bars"; // 1번 아이콘의 경로
 		linkElement.href = "/profile/<%= sessionId %>"; // 2번 링크
+		writerLink.href = "/articles/new";
 	}
 </script>

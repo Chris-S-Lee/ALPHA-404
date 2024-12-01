@@ -261,6 +261,43 @@ app.get("/profile/:id", async (req, res) => {
 	}
 });
 
+//전체 프로필 페이지를 위한 GET 라우트
+app.get("/profiles", async (req, res) => {
+	try {
+		let sessionId = req.session.userId; // 세션에서 userId 가져오기
+
+		if (!sessionId || sessionId === "undefined") {
+			sessionId = "none";
+		}
+
+		// 모든 사용자와 게시물 데이터 가져오기
+		const [users] = await db.query("SELECT * FROM users");
+		const [allArticles] = await db.query("SELECT * FROM articles");
+
+		// 작성자별로 게시물 수 집계
+		const articleCountByUserId = allArticles.reduce((acc, article) => {
+			const authorId = article.author_id;
+			acc[authorId] = (acc[authorId] || 0) + 1; // 작성자 ID별로 갯수 추가
+			return acc;
+		}, {});
+
+		// 유저 데이터에 작성 글 수 추가
+		const usersWithArticleCount = users.map((user) => ({
+			...user,
+			articleCount: articleCountByUserId[user.id] || 0, // 작성자가 작성한 글 수 (없으면 0)
+		}));
+
+		// 사용자 정보와 게시물 반환
+		res.render("all_profile", {
+			users: usersWithArticleCount,
+			sessionId,
+		}); // all_profile.ejs로 데이터 전달
+	} catch (err) {
+		console.error("Error fetching profiles data:", err);
+		res.status(500).json({ error: "Failed to fetch profiles data" });
+	}
+});
+
 // 게시글 작성 폼을 렌더링하는 GET 라우트 (로그인 확인)
 app.get("/articles/new", isAuthenticated, (req, res) => {
 	try {

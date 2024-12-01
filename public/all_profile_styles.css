@@ -1,0 +1,84 @@
+@font-face {
+	font-family: "KD";
+	font-style: normal;
+	font-weight: 300;
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Light.eot);
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Light.eot?#iefix) format("embedded-opentype"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Light.woff) format("woff"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Light.ttf) format("truetype");
+}
+@font-face {
+	font-family: "KD";
+	font-style: normal;
+	font-weight: 500;
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Medium.eot);
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Medium.eot?#iefix) format("embedded-opentype"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Medium.woff) format("woff"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Medium.ttf) format("truetype");
+}
+@font-face {
+	font-family: "KD";
+	font-style: normal;
+	font-weight: 700;
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Bold.eot);
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Bold.eot?#iefix) format("embedded-opentype"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Bold.woff) format("woff"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Bold.ttf) format("truetype");
+}
+* {
+	margin: 0;
+	padding: 0;
+	font-family: KD;
+}
+body {
+	margin: 10%;
+	margin-top: 0;
+	padding: 0;
+	list-style: none;
+}
+a {
+	color: black;
+	text-decoration: none;
+}
+.info {
+	margin-left: 2em;
+	margin-right: 2em;
+	font-size: 24px;
+	text-align: center;
+}
+h1 {
+	text-align: center;
+	font-size: 3.5em;
+	font-weight: 700;
+	padding: 0.5em;
+	padding-bottom: 0;
+	/* border-bottom: darkgray 0.05em solid; */
+}
+
+.all-container {
+	display: grid;
+	margin: 0.5em;
+	grid-template-columns: auto auto auto auto;
+}
+
+h3 {
+	margin-top: 0.2em;
+	font-style: italic;
+	color: green;
+}
+
+.profile-container {
+	text-align: center;
+}
+
+#photo {
+	margin-top: 3em;
+	width: 16em; /* 원하는 너비 */
+	height: 16em; /* 원하는 높이 */
+	border-radius: 50%; /* 모서리를 둥글게 */
+	object-fit: cover; /* 이미지 비율 유지하며 채우기 */
+}
+
+.name {
+	margin-top: 0.2em;
+}

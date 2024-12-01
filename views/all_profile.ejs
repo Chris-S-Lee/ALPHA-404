@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" href="/public/all_profile_styles.css" />
+		<title>Profile</title>
+	</head>
+	<body>
+		<%-include("header.ejs") %>
+		<h1>KJD 기자단</h1>
+		<div class="all-container">
+			<% users.forEach(user => { %>
+			<div class="profile-container">
+				<img
+					src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
+					alt="profile image"
+					id="photo" />
+				<div class="name">
+					<h2><a href="/profile/<%= user.id %>"><%= user.username %> 기자</a></h2>
+					<h3>작성한 기사: <%= user.articleCount %>개</h3>
+				</div>
+			</div>
+			<% }) %>
+		</div>
+	</body>
+</html>
