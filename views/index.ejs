@@ -31,7 +31,9 @@
 				<% articles.forEach(article => { %>
 				<div>
 					<li>
-						<a href="/articles/<%= article.id %>"> <%= article.title %> </a>
+						<a href="/articles/<%= article.id %>"> <%- article.title.length > 30 ? article.title.substring(0, 30) + '...' : article.title %> </a>
+						<!-- <a href="/articles/<%= article.id %>"> <%= article.title %> </a> -->
+
 						<span id="when">&nbsp<%= article.createdAtFormatted %></span>
 					</li>
 				</div>
@@ -45,7 +47,7 @@
 					<li>
 						<div class="sub">
 							<div class="category"><%= article.category %></div>
-							<a href="/articles/<%= article.id %>"><%= article.title %></a>
+							<a href="/articles/<%= article.id %>"> <%- article.title.length > 20 ? article.title.substring(0, 20) + '...' : article.title %> </a>
 							<!-- - <small><%= article.timeAgo %></small> -->
 							<!-- 서버에서 넘겨준 시간 차이 표시 -->
 						</div>
