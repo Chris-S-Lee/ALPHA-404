@@ -314,6 +314,44 @@ app.get("/profile/:id", async (req, res) => {
 	}
 });
 
+//프로필 페이지를 위한 GET 라우트
+app.get("/profile/:id/edit", isAuthenticated, async (req, res) => {
+	const userId = req.params.id; // URL에서 사용자 ID 추출
+
+	try {
+		let sessionId = req.session.userId; // 세션에서 userId 가져오기
+
+		if (!sessionId || sessionId === "undefined") {
+			sessionId = "none";
+		}
+		// SQL 쿼리를 사용하여 사용자 정보 가져오기
+		const [userinfo] = await db.query("SELECT * FROM users WHERE id = ?", [userId]);
+		const [articles] = await db.query("SELECT * FROM articles WHERE author_id = ? ", [userId]);
+
+		if (userinfo.length === 0) {
+			return res.status(404).json({ error: "User not found" });
+		}
+
+		const articlesArray = articles.map((article) => {
+			article.timeAgo = timeAgo(article.created_at); // 기존 상대시간
+			article.createdAtFormatted = formatDate(article.created_at); // 포맷된 날짜 추가
+			return article;
+		});
+		const article = [...articlesArray];
+
+		// 사용자 정보 반환
+		res.render("edit_profile", {
+			user: userinfo[0],
+			articles: articlesArray,
+			article,
+			sessionId,
+		}); // profile.ejs로 데이터 전달
+	} catch (err) {
+		console.error("Error fetching user data:", err);
+		res.status(500).json({ error: "Failed to fetch user data" });
+	}
+});
+
 //전체 프로필 페이지를 위한 GET 라우트
 app.get("/profiles", async (req, res) => {
 	try {

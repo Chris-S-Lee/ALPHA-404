@@ -20,7 +20,6 @@
 				<a href="/profile/<%= user.id %>/edit" class="icon-button" title="Edit" style="display: inline">
 					<i class="fas fa-edit"></i>
 				</a>
-				<button id="delete-account-btn">Delete Account</button>
 
 				<% } %>
 			</div>
@@ -41,24 +40,3 @@
 		</div>
 	</body>
 </html>
-<script>
-	document.getElementById("delete-account-btn").addEventListener("click", async () => {
-		const confirmation = confirm("Are you sure you want to delete your account? This action cannot be undone.");
-		if (confirmation) {
-			try {
-				const response = await fetch("/delete-account", {
-					method: "DELETE",
-				});
-				const result = await response.json();
-
-				alert(result.message);
-
-				if (response.ok) {
-					window.location.href = result.redirectUrl; // 서버에서 제공한 URL로 리다이렉트
-				}
-			} catch (err) {
-				console.error("Error deleting account:", err);
-			}
-		}
-	});
-</script>
