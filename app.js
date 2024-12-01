@@ -333,8 +333,7 @@ app.get("/profile/:id/edit", isAuthenticated, async (req, res) => {
 app.post("/profile/:id/edit", isAuthenticated, upload.single("attachment"), async (req, res) => {
 	const userId = req.params.id; // URL에서 사용자 ID 추출
 	const { usernameN, nohashN, bioN } = req.body;
-	let filePath = req.file ? req.file.path : "https://www.next-t.co.kr/public/uploads/7b7f7e2138e29e598cd0cdf2c85ea08d.jpg";
-	const filePathN = filePath.replace(/\\+/g, "\\");
+	const filePathN = req.file ? req.file.path : "https://www.next-t.co.kr/public/uploads/7b7f7e2138e29e598cd0cdf2c85ea08d.jpg";
 
 	try {
 		// 비밀번호를 변경할 경우에만 해시화하여 업데이트
