@@ -147,6 +147,59 @@ app.get("/logout", (req, res) => {
 	});
 });
 
+// //계정 삭제를 처리하는 POST 라우트
+// app.delete("/delete-account", async (req, res) => {
+// 	try {
+// 		const userId = req.session.userId; // 현재 세션의 사용자 ID 가져오기
+
+// 		// 로그인 상태 확인
+// 		if (!userId) {
+// 			return res.status(401).json({ message: "Unauthorized: You must be logged in to delete your account." });
+// 		}
+
+// 		// 계정 삭제 쿼리 실행
+// 		await db.query("DELETE FROM users WHERE id = ?", [userId]);
+
+// 		// 세션 삭제
+// 		req.session.destroy((err) => {
+// 			if (err) {
+// 				console.error("Error destroying session:", err);
+// 			}
+// 			console.log("삭제 성공");
+// 			console.log("redirect 직전");
+// 			res.redirect("/");
+// 		});
+// 	} catch (err) {
+// 		console.error("Error deleting account:", err);
+// 		res.status(500).json({ message: "An error occurred while deleting the account." });
+// 	}
+// });
+
+//계정 삭제 및 로그아웃
+app.delete("/delete-account", async (req, res) => {
+	try {
+		const userId = req.session.userId; // 현재 세션의 사용자 ID 가져오기
+
+		// 계정 삭제 쿼리 실행
+		await db.query("DELETE FROM users WHERE id = ?", [userId]);
+
+		// 세션 삭제 및 로그아웃
+		req.session.destroy((err) => {
+			if (err) {
+				console.error("Error destroying session:", err);
+			}
+			console.log("계정 삭제 성공");
+			res.status(200).json({
+				message: "Account deleted and logged out successfully.",
+				redirectUrl: "/", // 리다이렉트할 URL
+			});
+		});
+	} catch (err) {
+		console.error("Error deleting account and logging out:", err);
+		res.status(500).json({ message: "An error occurred while deleting the account." });
+	}
+});
+
 app.get("/", async (req, res) => {
 	try {
 		const [articles] = await db.query(`
