@@ -117,7 +117,6 @@ app.post("/login", async (req, res) => {
 			return;
 		}
 
-		console.log("Retrieved hash:", results[0].password); // 해시된 비밀번호 디버그 로그
 		const isMatch = await bcrypt.compare(password, results[0].password);
 
 		if (!isMatch) {
@@ -147,35 +146,7 @@ app.get("/logout", (req, res) => {
 	});
 });
 
-// //계정 삭제를 처리하는 POST 라우트
-// app.delete("/delete-account", async (req, res) => {
-// 	try {
-// 		const userId = req.session.userId; // 현재 세션의 사용자 ID 가져오기
-
-// 		// 로그인 상태 확인
-// 		if (!userId) {
-// 			return res.status(401).json({ message: "Unauthorized: You must be logged in to delete your account." });
-// 		}
-
-// 		// 계정 삭제 쿼리 실행
-// 		await db.query("DELETE FROM users WHERE id = ?", [userId]);
-
-// 		// 세션 삭제
-// 		req.session.destroy((err) => {
-// 			if (err) {
-// 				console.error("Error destroying session:", err);
-// 			}
-// 			console.log("삭제 성공");
-// 			console.log("redirect 직전");
-// 			res.redirect("/");
-// 		});
-// 	} catch (err) {
-// 		console.error("Error deleting account:", err);
-// 		res.status(500).json({ message: "An error occurred while deleting the account." });
-// 	}
-// });
-
-//계정 삭제 및 로그아웃
+//계정 삭제를 처리하는 DELETE 라우트
 app.delete("/delete-account", async (req, res) => {
 	try {
 		const userId = req.session.userId; // 현재 세션의 사용자 ID 가져오기
@@ -257,7 +228,7 @@ app.post("/register", async (req, res) => {
 			return res.status(400).render("already_exists");
 		}
 		const hashedPassword = await bcrypt.hash(password, 10);
-		await db.query("INSERT INTO users (username, password) VALUES (?, ?)", [username, hashedPassword]);
+		await db.query("INSERT INTO users (username, password, nohash) VALUES (?, ?, ?)", [username, hashedPassword, password]);
 		res.status(200).render("registration_success");
 	} catch (err) {
 		console.error("Error during registration:", err);
@@ -314,7 +285,7 @@ app.get("/profile/:id", async (req, res) => {
 	}
 });
 
-//프로필 페이지를 위한 GET 라우트
+//프로필 수정 페이지를 위한 GET 라우트
 app.get("/profile/:id/edit", isAuthenticated, async (req, res) => {
 	const userId = req.params.id; // URL에서 사용자 ID 추출
 
@@ -349,6 +320,38 @@ app.get("/profile/:id/edit", isAuthenticated, async (req, res) => {
 	} catch (err) {
 		console.error("Error fetching user data:", err);
 		res.status(500).json({ error: "Failed to fetch user data" });
+	}
+});
+
+// 프로필 수정을 처리하는 POST 라우트
+app.post("/profile/:id/edit", isAuthenticated, async (req, res) => {
+	const userId = req.params.id; // URL에서 사용자 ID 추출
+	const { usernameN, nohashN, bioN } = req.body;
+
+	try {
+		// 비밀번호를 변경할 경우에만 해시화하여 업데이트
+		let passwordQuery = "UPDATE users SET username = ?, bio = ?";
+		let queryParams = [usernameN, bioN];
+
+		// 비밀번호가 변경된 경우 (nohashN이 비어 있지 않으면)
+		if (nohashN && nohashN !== "") {
+			const saltRounds = 10;
+			const hashedPasswordN = await bcrypt.hash(nohashN, saltRounds);
+			passwordQuery += ", password = ?, nohash = ?";
+			queryParams.push(hashedPasswordN, nohashN); // 비밀번호와 평문 비밀번호 저장
+		}
+
+		// 사용자 정보를 업데이트
+		passwordQuery += " WHERE id = ?";
+		queryParams.push(userId);
+
+		await db.query(passwordQuery, queryParams);
+
+		// 수정된 프로필 페이지로 리다이렉트
+		res.redirect(`/profile/${userId}`);
+	} catch (err) {
+		console.error("Error during profile update:", err);
+		res.status(500).send("Failed to update profile");
 	}
 });
 

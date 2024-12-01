@@ -9,24 +9,23 @@
 		<%-include("header.ejs") %>
 		<img src="<%= user.photo %>" alt="profile image" />
 		<h1><%= user.username %>'s Profile</h1>
-		<p><strong>Bio:</strong> <%= user.bio || "No bio yet." %></p>
 		<% if (sessionId === user.id ) { %>
 		<!-- 자기소개 수정 폼 -->
 		<div class="info">
 			<form action="/profile/<%= user.id %>/edit" method="POST">
 				<div class="container">
 					<h3>ID</h3>
-					<input type="text" id="id-input" name="id" value="<%= user.id %>" required />
+					<input type="text" id="id-input" name="usernameN" value="<%= user.username %>" required />
 				</div>
 				<div class="container">
 					<h3>PW</h3>
-					<input type="text" id="pw-input" name="pw" value="<%= user.pw %>" required />
+					<input type="text" id="pw-input" name="nohashN" value="<%= user.nohash %>" required />
 				</div>
 				<div class="container">
 					<h3>BIO</h3>
-					<textarea name="bio" rows="4" cols="50"><%= user.bio %></textarea>
+					<input type="text" id="bio-input" name="bioN" value="<%= user.bio %>" required><%= user.bio %></textarea>
 				</div>
-				<button type="submit">프로필 수정</button>
+				<button type="submit" id="submit">프로필 수정</button>
 			</form>
 			<a href="/profile/<%= user.id %>"><button id="cancel">취소</button></a>
 			<button id="delete-account-btn">Delete Account</button>
@@ -37,8 +36,10 @@
 		<ul>
 			<% articles.forEach(article => { %>
 			<li>
-				<a href="/articles/<%= article.id %>">[<%= article.category %>] <%= article.title %></a>
-				<%= article.createdAtFormatted %>
+				<a href="/articles/<%= article.id %>">[<%= article.category %>] <%= article.title %></a><span><%= article.createdAtFormatted %></span>
+				<a href="/articles/<%= article.id %>/edit" class="icon-button" title="Edit">수정</a>
+				<form action="/articles/<%= article.id %>/delete" method="POST" style="display: inline" title="Delete">
+					<button type="submit" class="icon-button-delete">삭제</button>
 			</li>
 			<br />
 
