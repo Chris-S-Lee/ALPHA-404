@@ -126,6 +126,7 @@ app.post("/login", async (req, res) => {
 
 		// 로그인 성공 시 세션에 사용자 ID 저장
 		req.session.userId = results[0].id;
+		console.log(results);
 		res.redirect("/"); //로그인 성공 시 메인 페이지 리디렉션
 	} catch (err) {
 		console.error("Error during login:", err);
@@ -228,7 +229,12 @@ app.post("/register", async (req, res) => {
 			return res.status(400).render("already_exists");
 		}
 		const hashedPassword = await bcrypt.hash(password, 10);
-		await db.query("INSERT INTO users (username, password, nohash) VALUES (?, ?, ?)", [username, hashedPassword, password]);
+		await db.query("INSERT INTO users (username, password, nohash, photo) VALUES (?, ?, ?, ?)", [
+			username,
+			hashedPassword,
+			password,
+			"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+		]);
 		res.status(200).render("registration_success");
 	} catch (err) {
 		console.error("Error during registration:", err);
@@ -324,14 +330,19 @@ app.get("/profile/:id/edit", isAuthenticated, async (req, res) => {
 });
 
 // 프로필 수정을 처리하는 POST 라우트
-app.post("/profile/:id/edit", isAuthenticated, async (req, res) => {
+app.post("/profile/:id/edit", isAuthenticated, upload.single("attachment"), async (req, res) => {
 	const userId = req.params.id; // URL에서 사용자 ID 추출
 	const { usernameN, nohashN, bioN } = req.body;
+	let filePath = req.file ? req.file.path : "https://www.next-t.co.kr/public/uploads/7b7f7e2138e29e598cd0cdf2c85ea08d.jpg";
+	const filePathN = filePath.replace(/\\+/g, "\\");
 
 	try {
 		// 비밀번호를 변경할 경우에만 해시화하여 업데이트
-		let passwordQuery = "UPDATE users SET username = ?, bio = ?";
-		let queryParams = [usernameN, bioN];
+		let passwordQuery = "UPDATE users SET username = ?, bio = ?, photo = ?";
+		let queryParams = [usernameN, bioN, filePathN];
+		// req.file을 통해 파일 경로를 가져옴
+
+		console.log(`filePath : ${filePathN}`);
 
 		// 비밀번호가 변경된 경우 (nohashN이 비어 있지 않으면)
 		if (nohashN && nohashN !== "") {

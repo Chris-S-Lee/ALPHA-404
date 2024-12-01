@@ -73,7 +73,7 @@ a {
 li {
 	display: inline-block;
 }
-ul {
+.categoryUL {
 	text-align: center;
 }
 .block {

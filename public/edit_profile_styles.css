@@ -192,3 +192,16 @@ input {
 #delete-each:hover {
 	background-color: #aa0000;
 }
+
+#photo {
+	margin: 0;
+	width: 10em; /* 원하는 너비 */
+	height: 10em; /* 원하는 높이 */
+	border-radius: 50%; /* 모서리를 둥글게 */
+	object-fit: cover; /* 이미지 비율 유지하며 채우기 */
+}
+
+.data {
+	display: grid;
+	grid-template-columns: 85% auto;
+}
