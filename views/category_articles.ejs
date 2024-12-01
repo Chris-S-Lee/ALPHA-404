@@ -13,7 +13,7 @@
 			<div class="news">
 				<% articles.forEach(article => { %>
 				<p>
-					<a href="/articles/<%= article.id %>"> <%= article.title %> </a>
+					<a href="/articles/<%= article.id %>"> <%= article.title %> <span id="when"> <%= article.createdAtFormatted %></span></a>
 				</p>
 				<% }) %>
 			</div>

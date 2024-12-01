@@ -498,7 +498,12 @@ app.get("/articles/category/:category", async (req, res) => {
 			sessionId = "none";
 		}
 
-		res.render("category_articles", { articles, category, sessionId });
+		const articlesArray = articles.map((article) => {
+			article.timeAgo = timeAgo(article.created_at); // 기존 상대시간
+			article.createdAtFormatted = formatDate(article.created_at); // 포맷된 날짜 추가
+			return article;
+		});
+		res.render("category_articles", { articles, category, articlesArray, sessionId });
 	} catch (err) {
 		console.error("Error fetching articles by category:", err);
 		res.status(500).send("Failed to load articles by category");

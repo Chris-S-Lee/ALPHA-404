@@ -56,3 +56,7 @@ p {
 	font-size: 2em;
 	border-bottom: darkgray 0.05em solid;
 }
+#when {
+	color: darkgray;
+	font-size: 0.7em;
+}

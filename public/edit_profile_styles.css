@@ -1,0 +1,194 @@
+@font-face {
+	font-family: "KD";
+	font-style: normal;
+	font-weight: 300;
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Light.eot);
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Light.eot?#iefix) format("embedded-opentype"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Light.woff) format("woff"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Light.ttf) format("truetype");
+}
+@font-face {
+	font-family: "KD";
+	font-style: normal;
+	font-weight: 500;
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Medium.eot);
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Medium.eot?#iefix) format("embedded-opentype"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Medium.woff) format("woff"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Medium.ttf) format("truetype");
+}
+@font-face {
+	font-family: "KD";
+	font-style: normal;
+	font-weight: 700;
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Bold.eot);
+	src: url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Bold.eot?#iefix) format("embedded-opentype"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Bold.woff) format("woff"),
+		url(//cdn.jsdelivr.net/npm/font-kopub@1.0/fonts/KoPubDotum-Bold.ttf) format("truetype");
+}
+* {
+	margin: 0;
+	padding: 0;
+	font-family: KD;
+}
+body {
+	margin: 10%;
+	margin-top: 0;
+	padding: 0;
+	list-style: none;
+}
+a {
+	color: black;
+	text-decoration: none;
+}
+.info {
+	margin-left: 2em;
+	margin-right: 2em;
+	font-size: 24px;
+	text-align: center;
+}
+.container {
+	display: grid;
+	margin: 1em;
+	grid-template-columns: 7em auto;
+}
+
+h3 {
+	text-align: left;
+	font-family: KD;
+	font-weight: 700;
+}
+
+input {
+	padding: 0.2em;
+	font-size: 1em;
+}
+
+.button-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	max-width: 20em; /* 삭제 버튼 너비와 맞춤 */
+	margin: 0 auto;
+}
+
+#submit {
+	width: 20em;
+	height: 2em;
+	background: #62b66d;
+	border: none;
+	outline: none;
+	border-radius: 1em;
+	box-shadow: 0 0 0.625em rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+	font-size: 1em;
+	color: #ffffff;
+	font-weight: 600;
+}
+#submit:hover {
+	background: #2a8535;
+}
+
+#cancel {
+	width: 9.5em;
+	height: 2em;
+	background: #838383;
+	border: none;
+	outline: none;
+	border-radius: 1em;
+	box-shadow: 0 0 0.625em rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+	font-size: 1em;
+	color: #ffffff;
+	font-weight: 600;
+	margin-bottom: 1em;
+	margin-right: 0.5em;
+}
+#cancel:hover {
+	background: #464646;
+}
+
+#delete-account-btn {
+	width: 9.5em;
+	height: 2em;
+	background: #e24747;
+	border: none;
+	outline: none;
+	border-radius: 1em;
+	box-shadow: 0 0 0.625em rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+	font-size: 1em;
+	color: #ffffff;
+	font-weight: 600;
+	margin-top: 1em;
+	margin-left: 0.5em;
+	text-align: center; /* 텍스트 정렬 */
+}
+#delete-account-btn:hover {
+	background: #aa0000;
+}
+
+.ul {
+	border-top: darkgray 0.05em solid;
+}
+
+.writenNews {
+	text-align: left;
+	padding-top: 0.7em;
+	padding-bottom: 0.7em;
+	padding-left: 0.6em;
+	font-size: 2em;
+	border-bottom: darkgray 0.05em solid;
+	list-style-type: none;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+#when {
+	color: darkgray;
+	font-size: 0.7em;
+}
+
+#categoryAndTitle {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+}
+
+#categoryAndTitle a:first-child {
+	flex: 1; /* 제목과 카테고리 영역 확장 */
+	text-decoration: none;
+	color: black;
+}
+
+.action-buttons {
+	display: flex;
+	gap: 0.5em; /* 수정과 삭제 버튼 간격 */
+}
+
+#edit-each,
+#delete-each {
+	background-color: #62b66d;
+	color: #ffffff !important;
+	border: none;
+	outline: none;
+	border-radius: 1em;
+	padding: 0.5em 1em;
+	cursor: pointer;
+	font-size: 0.9em;
+	font-weight: 600;
+}
+
+#edit-each:hover {
+	background-color: #2a8535;
+}
+
+#delete-each {
+	background-color: #e24747;
+}
+
+#delete-each:hover {
+	background-color: #aa0000;
+}

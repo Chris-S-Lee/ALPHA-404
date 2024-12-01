@@ -90,6 +90,7 @@ h1 {
 	padding-top: 0;
 	padding-left: 0;
 	border-bottom: darkgray 0.15em solid;
+	padding-bottom: 1em;
 }
 
 .others-title div {
@@ -114,6 +115,7 @@ h1 {
 	padding-right: 0;
 	font-size: 2em;
 	text-align: left;
+
 	/* border-bottom: darkgray 0.05em solid; */
 }
 .top-news h3 {
