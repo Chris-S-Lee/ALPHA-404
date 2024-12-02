@@ -17,7 +17,7 @@
 			</li>
 			<li class="main-news">
 				<div class="article-container">
-					<p><%- article.content.length > 280 ? article.content.substring(0, 280) + '...' : article.content %> <% if (article.attachment) { %></p>
+					<p><%- article.content.length > 200 ? article.content.substring(0, 200) + '...' : article.content %> <% if (article.attachment) { %></p>
 					<p><%= article.createdAtFormatted %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= article.author_name %> 기자</p>
 				</div>
 				<img src="/<%= article.attachment %>" alt="<%= article.title %>" width="300" />
@@ -31,7 +31,7 @@
 				<% articles.forEach(article => { %>
 				<div>
 					<li>
-						<a href="/articles/<%= article.id %>"> <%- article.title.length > 30 ? article.title.substring(0, 30) + '...' : article.title %> </a>
+						<a href="/articles/<%= article.id %>">[<%= article.category %>] <%- article.title.length > 25 ? article.title.substring(0, 25) + '...' : article.title %> </a><br>
 						<span id="when">&nbsp<%= article.createdAtFormatted %></span>
 					</li>
 				</div>
@@ -50,7 +50,11 @@
 					</li>
 				</div>
 				<% }) %>
+				
 			</ul>
+			
 		</div>
+		<!-- 저작권 표시 -->
+		<p class="copyright">[저작권자 © KJD, 무단전재 및 재배포 금지]</p>
 	</body>
 </html>

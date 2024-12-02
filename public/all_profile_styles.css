@@ -61,24 +61,60 @@ h1 {
 	grid-template-columns: auto auto auto auto;
 }
 
-h3 {
-	margin-top: 0.2em;
-	font-style: italic;
-	color: green;
-}
-
-.profile-container {
+/* 저작권 표시 */
+.copyright {
+	font-family: KD;
 	text-align: center;
+	font-size: 1.1em;
+	color: #7f8c8d;
+	padding: 20px;
 }
 
-#photo {
-	margin-top: 3em;
-	width: 16em; /* 원하는 너비 */
-	height: 16em; /* 원하는 높이 */
-	border-radius: 50%; /* 모서리를 둥글게 */
-	object-fit: cover; /* 이미지 비율 유지하며 채우기 */
-}
-
-.name {
-	margin-top: 0.2em;
-}
+.profile-link {
+	text-decoration: none; /* 기본 링크 스타일 제거 */
+	color: inherit; /* 텍스트 색상은 부모 요소에서 상속 */
+	display: block; /* 링크가 블록 요소로 동작하게 하여 전체 프로필을 클릭 가능하게 만듬 */
+	border-radius: 10px; /* 모서리 둥글게 처리 */
+	overflow: hidden; /* 프로필 이미지를 둥글게 잘라내기 */
+	transition: transform 0.3s ease, box-shadow 0.3s ease; /* 부드러운 애니메이션 효과 */
+  }
+  
+  .profile-link:hover {
+	transform: scale(1.02); /* 마우스를 올렸을 때 크기 확대 */
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 추가 */
+  }
+  
+  .profile-container {
+	display: flex;
+	align-items: center;
+	padding: 15px;
+	background-color: #fff;
+	border-radius: 10px;
+	transition: background-color 0.3s ease;
+  }
+  
+  .profile-container:hover {
+	background-color: #f9f9f9; /* 마우스를 올렸을 때 배경색 변경 */
+  }
+  
+  #photo {
+	width: 80px;
+	height: 80px;
+	object-fit: cover; /* 이미지를 잘라서 맞춤 */
+	border-radius: 50%; /* 이미지 둥글게 */
+	margin-right: 15px; /* 이미지와 텍스트 사이 간격 */
+  }
+  
+  .name h2 {
+	font-size: 18px;
+	font-weight: 600;
+	margin: 0;
+	color: #333;
+  }
+  
+  .name h3 {
+	font-size: 14px;
+	color: #777;
+	margin: 5px 0 0;
+  }
+  

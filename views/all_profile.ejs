@@ -3,24 +3,30 @@
 	<head>
 		<meta charset="UTF-8" />
 		<link rel="stylesheet" href="/public/all_profile_styles.css" />
-		<title>Profile</title>
+		<title>KJD 기자단</title>
 	</head>
 	<body>
-		<%-include("header.ejs") %>
+		<%- include("header.ejs") %>
 		<h1>KJD 기자단</h1>
 		<div class="all-container">
 			<% users.forEach(user => { %>
-			<div class="profile-container">
-				<img
-					src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
-					alt="profile image"
-					id="photo" />
-				<div class="name">
-					<h2><a href="/profile/<%= user.id %>"><%= user.username %> 기자</a></h2>
-					<h3>작성한 기사: <%= user.articleCount %>개</h3>
+			<!-- 프로필 전체를 링크로 감쌈 -->
+			<a href="/profile/<%= user.id %>" class="profile-link">
+				<div class="profile-container">
+					<img
+						src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
+						alt="profile image"
+						id="photo" />
+					<div class="name">
+						<h2><%= user.username %> 기자</h2>
+						<h3>작성한 기사: <%= user.articleCount %>개</h3>
+					</div>
 				</div>
-			</div>
+			</a>
 			<% }) %>
 		</div>
+		<hr />
+		<!-- 저작권 표시 -->
+		<p class="copyright">[저작권자 © KJD, 무단전재 및 재배포 금지]</p>
 	</body>
 </html>

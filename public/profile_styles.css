@@ -102,3 +102,12 @@ h3 {
 	color: darkgray;
 	font-size: 0.7em;
 }
+
+/* 저작권 표시 */
+.copyright {
+	font-family: KD;
+	text-align: center;
+	font-size: 1.1em;
+	color: #7f8c8d;
+	padding: 20px;
+}
