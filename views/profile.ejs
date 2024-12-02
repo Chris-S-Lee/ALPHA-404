@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<link rel="stylesheet" href="/public/profile_styles.css" />
-		<title>Profile</title>
+		<title>KJD <%= user.username %> 기자</title>
 	</head>
 	<body>
 		<%-include("header.ejs") %>
@@ -20,7 +20,6 @@
 				<a href="/profile/<%= user.id %>/edit" class="icon-button" title="Edit" style="display: inline">
 					<i class="fas fa-edit"></i>
 				</a>
-
 				<% } %>
 			</div>
 			<p id="bio">"<%= user.bio || "No bio yet." %>"</p>
@@ -28,13 +27,12 @@
 
 		<div class="news-container">
 			<ul>
-				<% articles.forEach(article => { %>
+				<% articles.reverse().forEach(article => { %>  <!-- 여기서 reverse() 사용 -->
 				<li>
 					<a href="/articles/<%= article.id %>">[<%= article.category %>] <%= article.title %></a>
 					<span id="when">&nbsp<%= article.createdAtFormatted %></span>
 				</li>
 				<hr />
-
 				<% }) %>
 			</ul>
 		</div>
