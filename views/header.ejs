@@ -10,7 +10,8 @@
 		<a href="/" class="title-bar"><img src="/public/logo.png" /></a>
 		<div class="grid-container">
 			<div class="grid-item" id="upload">
-				<a href="/articles/new" id="writersLink"><i class="fas fa-pen-fancy"></i></a>
+				<!-- 로그인 상태에서만 글쓰기 아이콘 보이도록 설정 -->
+				<a href="/articles/new" id="writersLink" style="display: none;"><i class="fas fa-pen-fancy"></i></a>
 			</div>
 			<div class="grid-item">
 				<ul>
@@ -21,8 +22,9 @@
 				</ul>
 			</div>
 			<div class="grid-item" id="profile">
+				<!-- 로그인 상태에서만 로그아웃 아이콘 보이도록 설정 -->
 				<a href="/login" id="link"><i class="" id="icon"></i></a>
-				<a href="/logout" id="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+				<a href="/logout" id="logout" style="display: none;"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
 			</div>
 		</div>
 	</body>
@@ -32,18 +34,22 @@
 	const iconElement = document.getElementById("icon");
 	const linkElement = document.getElementById("link");
 	const writerLink = document.getElementById("writersLink");
+	const logoutLink = document.getElementById("logout");
 	const serverUserID = "<%= sessionId %>";
 	console.log("userid : ", serverUserID);
+
 	// API 호출 및 처리
 	if (serverUserID == "none") {
-		// Null인 경우 1번 아이콘과 링크를 표시
+		// Null인 경우 로그인 아이콘과 링크를 표시하고, 로그아웃 및 글쓰기 아이콘은 숨김
 		iconElement.className = "fas fa-user"; // 1번 아이콘의 경로
 		linkElement.href = "/login"; // 1번 링크
-		writerLink.href = "/profiles";
+		writerLink.style.display = "none"; // 글쓰기 아이콘 숨기기
+		logoutLink.style.display = "none"; // 로그아웃 아이콘 숨기기
 	} else {
-		// Null이 아닌 경우 2번 아이콘과 링크를 표시
+		// Null이 아닌 경우 프로필 아이콘과 링크를 표시하고, 로그아웃 및 글쓰기 아이콘을 표시
 		iconElement.className = "fas fa-bars"; // 1번 아이콘의 경로
 		linkElement.href = "/profile/<%= sessionId %>"; // 2번 링크
-		writerLink.href = "/articles/new";
+		writerLink.style.display = "inline"; // 글쓰기 아이콘 보이기
+		logoutLink.style.display = "inline"; // 로그아웃 아이콘 보이기
 	}
 </script>
