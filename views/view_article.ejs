@@ -5,7 +5,7 @@
 		<link rel="stylesheet" href="/public/article_styles.css" />
 		<link rel="icon" type="image/x-icon" href="favicon.png" />
 
-		<title><%= article.title %> - KJD</title>
+		<title><%= article.title %> -</title>
 	</head>
 	<body>
 		<%-include("header.ejs") %>
@@ -41,8 +41,9 @@
 						</button>
 					</div>
 				</div>
+				
 
-				<hr />
+
 				<!-- 기사 내용 -->
 				<div class="content-container">
 					<p><%- article.content %></p>
