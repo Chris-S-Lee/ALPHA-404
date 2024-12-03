@@ -46,7 +46,7 @@
 			<% articles.forEach(article => { %>
 			<div class="writenNews">
 				<li id="categoryAndTitle">
-					<p><a href="/articles/<%= article.id %>">[<%= article.category %>] <%= article.title %></a> <span id="when"><%= article.createdAtFormatted %></span></p>
+					<p><a href="/articles/<%= article.id %>">[<%= article.category %>] <%= article.title %></a> <br><span id="when"><%= article.createdAtFormatted %></span></p>
 					<div class="action-buttons">
 						<a href="/articles/<%= article.id %>/edit" class="icon-button" title="Edit" id="edit-each">수정</a>
 						<form action="/articles/<%= article.id %>/delete" method="POST" style="display: inline" title="Delete">
