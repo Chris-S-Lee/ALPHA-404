@@ -2,7 +2,7 @@
 const express = require("express");
 const mysql = require("mysql2/promise"); // promise를 사용하는 mysql2 모듈
 // const bcrypt = require("bcrypt"); // 비밀번호 해시를 위한 bcrypt 모듈
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 
 const session = require("express-session"); // 사용자 세션 관리를 위한 express-session 모듈
 require("dotenv").config(); // .env 파일에서 환경 변수를 불러옵니다.
