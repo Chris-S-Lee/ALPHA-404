@@ -175,46 +175,64 @@ app.delete("/delete-account", async (req, res) => {
 
 app.get("/", async (req, res) => {
 	try {
+		const page = parseInt(req.query.page) || 1; // 페이지 번호, 기본값은 1
+		const limit = 10; // 한 페이지당 게시물 개수
+		const offset = (page - 1) * limit; // 현재 페이지의 시작 위치
+
+		// 게시물 가져오기
 		const [articles] = await db.query(`
-							SELECT 
-									articles.id, 
-									articles.title, 
-									articles.content, 
-									articles.category, 
-									articles.created_at, 
-									articles.views,
-									articles.attachment,
-									users.username AS author_name 
-							FROM articles 
-							JOIN users ON articles.author_id = users.id
-							ORDER BY articles.created_at DESC
-					`);
+			SELECT 
+				articles.id, 
+				articles.title, 
+				articles.content, 
+				articles.category, 
+				articles.created_at, 
+				articles.views,
+				articles.attachment,
+				users.username AS author_name 
+			FROM articles 
+			JOIN users ON articles.author_id = users.id
+			ORDER BY articles.created_at DESC
+			LIMIT ? OFFSET ?
+		`, [limit, offset]);
+
+		// 게시물 수를 구해 총 페이지 수 계산
+		const [totalArticles] = await db.query("SELECT COUNT(*) AS count FROM articles");
+		const totalPages = Math.ceil(totalArticles[0].count / limit);
+
+		// 게시물 배열에 상대 시간 추가
 		const articlesArray = articles.map((article) => {
-			article.timeAgo = timeAgo(article.created_at); // 기존 상대시간
-			article.createdAtFormatted = formatDate(article.created_at); // 포맷된 날짜 추가
+			article.timeAgo = timeAgo(article.created_at);
+			article.createdAtFormatted = formatDate(article.created_at);
 			return article;
 		});
+
+		// 최신, 인기, 메인 게시물 추가
 		const latestArticles = [...articlesArray];
 		const topArticles = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 5);
 		const mainArticle = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 1);
-		let sessionId = req.session.userId; // 세션에서 userId 가져오기
 
+		let sessionId = req.session.userId;
 		if (!sessionId || sessionId === "undefined") {
 			sessionId = "none";
 		}
 
+		// 페이지네이션 정보 전달
 		res.render("index", {
 			articles: articlesArray,
 			latestArticles,
 			topArticles,
 			mainArticle,
 			sessionId,
+			currentPage: page,
+			totalPages: totalPages,
 		});
 	} catch (err) {
 		console.error("Error fetching articles:", err);
 		res.status(500).send("기사를 불러오지 못합니다.");
 	}
 });
+
 
 // 회원가입 페이지를 위한 GET 라우트
 app.get("/register", (req, res) => {
