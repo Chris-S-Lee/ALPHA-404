@@ -230,7 +230,12 @@ app.post("/register", async (req, res) => {
 			return res.status(400).render("already_exists");
 		}
 		const hashedPassword = await bcrypt.hash(password, 10);
-		await db.query("INSERT INTO users (username, password, nohash) VALUES (?, ?, ?)", [username, hashedPassword, password]);
+		await db.query("INSERT INTO users (username, password, nohash, photo) VALUES (?, ?, ?, ?)", [
+			username,
+			hashedPassword,
+			password,
+			"uploads\\1733203613688.jpg",
+		]);
 		res.status(200).render("registration_success");
 	} catch (err) {
 		console.error("Error during registration:", err);
