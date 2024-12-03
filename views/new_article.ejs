@@ -7,24 +7,7 @@
 		<link rel="icon" type="image/x-icon" href="/public/favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
 		<script src="https://kit.fontawesome.com/a914ae0fb8.js" crossorigin="anonymous"></script>
-		<script>
-			window.addEventListener("load", function () {
-				var allElements = document.getElementsByTagName("*");
-				Array.prototype.forEach.call(allElements, function (el) {
-					var includePath = el.dataset.includePath;
-					if (includePath) {
-						var xhttp = new XMLHttpRequest();
-						xhttp.onreadystatechange = function () {
-							if (this.readyState == 4 && this.status == 200) {
-								el.outerHTML = this.responseText;
-							}
-						};
-						xhttp.open("GET", includePath, true);
-						xhttp.send();
-					}
-				});
-			});
-		</script>
+
 	</head>
 	<body>
 		<%- include("header") %>
@@ -48,12 +31,67 @@
 					<h3>내용</h3>
 					<textarea id="content-input" name="content" rows="5" required></textarea>
 				</div>
+
 				<div class="container" id="image">
 					<h3>첨부파일</h3>
+					<label for="image-input" class="icon-label">
+						<img src="/public/photo.png" alt="Upload Icon" class="upload-icon" />
+						<span>파일 선택</span>
+					</label>
 					<input type="file" id="image-input" name="attachment" />
+					<p id="file-name">선택된 파일이 없습니다</p>
+					<img id="image-preview" src="" alt="Image Preview" />
 				</div>
+				
+					
 				<button type="submit" id="submit">업로드</button>
 			</form>
 		</div>
 	</body>
+	<script>
+		window.addEventListener("load", function () {
+			var allElements = document.getElementsByTagName("*");
+			Array.prototype.forEach.call(allElements, function (el) {
+				var includePath = el.dataset.includePath;
+				if (includePath) {
+					var xhttp = new XMLHttpRequest();
+					xhttp.onreadystatechange = function () {
+						if (this.readyState == 4 && this.status == 200) {
+							el.outerHTML = this.responseText;
+						}
+					};
+					xhttp.open("GET", includePath, true);
+					xhttp.send();
+				}
+			});
+		});
+
+		const fileInput = document.getElementById("image-input");
+const fileName = document.getElementById("file-name");
+const imagePreview = document.getElementById("image-preview");
+
+fileInput.addEventListener("change", (event) => {
+const file = event.target.files[0];
+if (file) {
+	// 파일 이름 표시
+	fileName.textContent = file.name;
+
+	// 이미지 미리보기 표시 (이미지 파일일 경우)
+	if (file.type.startsWith("image/")) {
+		const reader = new FileReader();
+		reader.onload = (e) => {
+			imagePreview.src = e.target.result;
+			imagePreview.style.display = "block";
+		};
+		reader.readAsDataURL(file);
+	} else {
+		imagePreview.style.display = "none";
+	}
+} else {
+	fileName.textContent = "선택된 파일이 없습니다";
+	imagePreview.style.display = "none";
+}
+});
+
+	</script>
 </html>

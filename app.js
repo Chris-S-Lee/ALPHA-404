@@ -347,12 +347,11 @@ app.get("/profile/:id/edit", isAuthenticated, async (req, res) => {
 		res.status(500).json({ error: "Failed to fetch user data" });
 	}
 });
-
 // 프로필 수정을 처리하는 POST 라우트
 app.post("/profile/:id/edit", isAuthenticated, upload.single("attachment"), async (req, res) => {
 	const userId = req.params.id; // URL에서 사용자 ID 추출
-	const { usernameN, nohashN, bioN } = req.body;
-	let filePath = req.file ? req.file.path : "https://www.next-t.co.kr/public/uploads/7b7f7e2138e29e598cd0cdf2c85ea08d.jpg";
+	const { usernameN, nohashN, bioN, currentPhoto } = req.body; // currentPhoto 추가
+	let filePath = req.file ? req.file.path : currentPhoto; // 파일이 없으면 기존 이미지 유지
 	const filePathN = filePath.replace(/\\+/g, "\\");
 	const profileImage = user.profileImage || '/public/profile.png';
 	res.render('profile', { user: { ...user, profileImage } });
@@ -362,8 +361,6 @@ app.post("/profile/:id/edit", isAuthenticated, upload.single("attachment"), asyn
 		// 비밀번호를 변경할 경우에만 해시화하여 업데이트
 		let passwordQuery = "UPDATE users SET username = ?, bio = ?, photo = ?";
 		let queryParams = [usernameN, bioN, filePathN];
-		// req.file을 통해 파일 경로를 가져옴
-		console.log(`filePath : ${filePathN}`);
 
 		// 비밀번호가 변경된 경우 (nohashN이 비어 있지 않으면)
 		if (nohashN && nohashN !== "") {

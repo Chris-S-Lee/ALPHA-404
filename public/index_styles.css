@@ -152,16 +152,21 @@ a:hover {
     margin: 0 5px;
     padding: 5px 10px;
     text-decoration: none;
-    color: #000;
+    color: green;
     border: 1px solid #ddd;
     border-radius: 3px;
 }
 
 .pagination a.active {
-    background-color: #4CAF50;
+    background-color: green;
     color: white;
 }
 
+.pagination a.active:hover {
+    background-color: rgb(123, 168, 123);
+}
+
 .pagination a:hover {
-    background-color: #ddd;
+    background-color: rgb(166, 166, 166);
+	color: white;
 }
