@@ -27,7 +27,7 @@
 				<% articles.reverse().forEach(article => { %>
 				<!-- 여기서 reverse() 사용 -->
 				<li>
-					<a href="/articles/<%= article.id %>">[<%= article.category %>] <%= article.title %></a>
+					<a href="/articles/<%= article.id %>">[<%= article.category %>] <%= article.title %></a><br>
 					<span id="when">&nbsp<%= article.createdAtFormatted %></span>
 				</li>
 				<hr />
