@@ -7,33 +7,41 @@
 	</head>
 	<body>
 		<%-include("header.ejs") %>
-		<img src="<%= user.photo %>" alt="profile image" />
 		<h1><%= user.username %>'s Profile</h1>
 		<% if (sessionId === user.id ) { %>
 		<!-- 자기소개 수정 폼 -->
 		<div class="info">
-			<form action="/profile/<%= user.id %>/edit" method="POST">
-				<div class="container">
-					<h3>ID</h3>
-					<input type="text" id="id-input" name="usernameN" value="<%= user.username %>" required />
-				</div>
-				<div class="container">
-					<h3>PW</h3>
-					<input type="text" id="pw-input" name="nohashN" value="<%= user.nohash %>" required />
-				</div>
-				<div class="container">
-					<h3>BIO</h3>
-					<input type="text" id="bio-input" name="bioN" value="<%= user.bio %>" required />
-				</div>
-				<div class="button-container">
-					<button type="submit" id="submit">프로필 수정</button>
-				</div>
-			</form>
-			<a href="/profile/<%= user.id %>"><button id="cancel">취소</button></a>
-			<button id="delete-account-btn">Delete Account</button>
-		</div>
-		<% } %>
+			<form action="/profile/<%= user.id %>/edit" method="POST" enctype="multipart/form-data">
+					<div class="data">
+						<div class="">
+							<div class="container">
+								<h3>ID</h3>
+								<input type="text" id="id-input" name="usernameN" value="<%= user.username %>" required />
+							</div>
+							<div class="container">
+								<h3>PW</h3>
+								<input type="text" id="pw-input" name="nohashN" value="<%= user.nohash %>" required />
+							</div>
+							<div class="container">
+								<h3>Bio</h3>
+								<input type="text" id="bio-input" name="bioN" value="<%= user.bio %>" required />
+							</div>
+							<div class="container" id="image">
+								<h3>Photo</h3>
+								<input type="file" id="image-input" name="attachment" />
+							</div>
+						</div>
+						<img src="\<%= user.photo %>" alt="profile image" id="photo" />
+					</div>	
 
+					<div class="button-container">
+						<button type="submit" id="submit">프로필 수정</button>
+					</div>
+				</form>
+				<a href="/profile/<%= user.id %>"><button id="cancel">취소</button></a>
+				<button id="delete-account-btn">Delete Account</button>
+			<% } %>
+		</div>
 		<ul class="ul">
 			<% articles.forEach(article => { %>
 			<div class="writenNews">
