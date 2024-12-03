@@ -1,7 +1,9 @@
 // 필요한 모듈을 가져옵니다.
 const express = require("express");
 const mysql = require("mysql2/promise"); // promise를 사용하는 mysql2 모듈
-const bcrypt = require("bcrypt"); // 비밀번호 해시를 위한 bcrypt 모듈
+// const bcrypt = require("bcrypt"); // 비밀번호 해시를 위한 bcrypt 모듈
+const bcrypt = require("bcryptjs");
+
 const session = require("express-session"); // 사용자 세션 관리를 위한 express-session 모듈
 require("dotenv").config(); // .env 파일에서 환경 변수를 불러옵니다.
 
@@ -324,14 +326,18 @@ app.get("/profile/:id/edit", isAuthenticated, async (req, res) => {
 });
 
 // 프로필 수정을 처리하는 POST 라우트
-app.post("/profile/:id/edit", isAuthenticated, async (req, res) => {
+app.post("/profile/:id/edit", isAuthenticated, upload.single("attachment"), async (req, res) => {
 	const userId = req.params.id; // URL에서 사용자 ID 추출
 	const { usernameN, nohashN, bioN } = req.body;
+	let filePath = req.file ? req.file.path : "https://www.next-t.co.kr/public/uploads/7b7f7e2138e29e598cd0cdf2c85ea08d.jpg";
+	const filePathN = filePath.replace(/\\+/g, "\\");
 
 	try {
 		// 비밀번호를 변경할 경우에만 해시화하여 업데이트
-		let passwordQuery = "UPDATE users SET username = ?, bio = ?";
-		let queryParams = [usernameN, bioN];
+		let passwordQuery = "UPDATE users SET username = ?, bio = ?, photo = ?";
+		let queryParams = [usernameN, bioN, filePathN];
+		// req.file을 통해 파일 경로를 가져옴
+		console.log(`filePath : ${filePathN}`);
 
 		// 비밀번호가 변경된 경우 (nohashN이 비어 있지 않으면)
 		if (nohashN && nohashN !== "") {

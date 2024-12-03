@@ -16,7 +16,10 @@
 				<div class="categoryandtitle">
 					<h1><%= article.title %></h1>
 					<p class="main-title">
-						<a href="/articles/category/<%= article.category %>" class="categoryman"><%= article.category %></a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/profile/<%= article.author_id %>"><%= article.author_name %> 기자</a>
+						<a href="/articles/category/<%= article.category %>" class="categoryman"><%= article.category %></a>&nbsp;&nbsp;|&nbsp;&nbsp;<a
+							href="/profile/<%= article.author_id %>"
+							><%= article.author_name %> 기자</a
+						>
 					</p>
 				</div>
 				<!-- 기사를 쓴 날짜 추가 -->
@@ -41,8 +44,8 @@
 						</button>
 					</div>
 				</div>
-				
 
+				<hr />
 
 				<!-- 기사 내용 -->
 				<div class="content-container">

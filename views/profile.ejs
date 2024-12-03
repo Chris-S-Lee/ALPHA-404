@@ -9,10 +9,7 @@
 		<%-include("header.ejs") %>
 		<!-- <img src="<%= user.photo %>" alt="profile image" id="photo" /> -->
 		<div class="profile-container">
-			<img
-				src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
-				alt="profile image"
-				id="photo" />
+			<img src="\<%= user.photo %>" alt="profile image" id="photo" />
 			<div class="name">
 				<h1 style="display: inline"><%= user.username %> 기자</h1>
 				<% if (sessionId === user.id ) { %>
@@ -27,7 +24,8 @@
 
 		<div class="news-container">
 			<ul>
-				<% articles.reverse().forEach(article => { %>  <!-- 여기서 reverse() 사용 -->
+				<% articles.reverse().forEach(article => { %>
+				<!-- 여기서 reverse() 사용 -->
 				<li>
 					<a href="/articles/<%= article.id %>">[<%= article.category %>] <%= article.title %></a>
 					<span id="when">&nbsp<%= article.createdAtFormatted %></span>
@@ -36,7 +34,7 @@
 				<% }) %>
 			</ul>
 		</div>
-				<!-- 저작권 표시 -->
-				<p class="copyright">[저작권자 © KJD, 무단전재 및 재배포 금지]</p>
+		<!-- 저작권 표시 -->
+		<p class="copyright">[저작권자 © KJD, 무단전재 및 재배포 금지]</p>
 	</body>
 </html>
