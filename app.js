@@ -256,7 +256,7 @@ app.post("/register", async (req, res) => {
 			password,
 			"uploads\\1733203613688.jpg",
 		]);
-		res.status(200).render("registration_success");
+		res.status(200).redirect("login");
 	} catch (err) {
 		console.error("Error during registration:", err);
 		return res.status(500).render("registration_failed");
