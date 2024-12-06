@@ -180,7 +180,8 @@ app.get("/", async (req, res) => {
 		const offset = (page - 1) * limit; // 현재 페이지의 시작 위치
 
 		// 게시물 가져오기
-		const [articles] = await db.query(`
+		const [articles] = await db.query(
+			`
 			SELECT 
 				articles.id, 
 				articles.title, 
@@ -194,7 +195,9 @@ app.get("/", async (req, res) => {
 			JOIN users ON articles.author_id = users.id
 			ORDER BY articles.created_at DESC
 			LIMIT ? OFFSET ?
-		`, [limit, offset]);
+		`,
+			[limit, offset]
+		);
 
 		// 게시물 수를 구해 총 페이지 수 계산
 		const [totalArticles] = await db.query("SELECT COUNT(*) AS count FROM articles");
@@ -232,7 +235,6 @@ app.get("/", async (req, res) => {
 		res.status(500).send("기사를 불러오지 못합니다.");
 	}
 });
-
 
 // 회원가입 페이지를 위한 GET 라우트
 app.get("/register", (req, res) => {
@@ -347,18 +349,28 @@ app.get("/profile/:id/edit", isAuthenticated, async (req, res) => {
 		res.status(500).json({ error: "Failed to fetch user data" });
 	}
 });
+
 // 프로필 수정을 처리하는 POST 라우트
 app.post("/profile/:id/edit", isAuthenticated, upload.single("attachment"), async (req, res) => {
 	const userId = req.params.id; // URL에서 사용자 ID 추출
 	const { usernameN, nohashN, bioN, currentPhoto } = req.body; // currentPhoto 추가
 	let filePath = req.file ? req.file.path : currentPhoto; // 파일이 없으면 기존 이미지 유지
 	const filePathN = filePath.replace(/\\+/g, "\\");
-	const profileImage = user.profileImage || '/public/profile.png';
-	res.render('profile', { user: { ...user, profileImage } });
-
 
 	try {
-		// 비밀번호를 변경할 경우에만 해시화하여 업데이트
+		// 데이터베이스에서 사용자 정보 가져오기
+		const [rows] = await db.query("SELECT * FROM users WHERE id = ?", [userId]);
+		const user = rows[0]; // 사용자 정보 가져오기
+
+		// 사용자 정보가 없는 경우 오류 처리
+		if (!user) {
+			return res.status(404).send("User not found");
+		}
+
+		// 프로필 이미지 처리
+		const profileImage = user.photo || "/public/profile.png";
+
+		// 사용자 정보를 업데이트
 		let passwordQuery = "UPDATE users SET username = ?, bio = ?, photo = ?";
 		let queryParams = [usernameN, bioN, filePathN];
 
@@ -370,7 +382,6 @@ app.post("/profile/:id/edit", isAuthenticated, upload.single("attachment"), asyn
 			queryParams.push(hashedPasswordN, nohashN); // 비밀번호와 평문 비밀번호 저장
 		}
 
-		// 사용자 정보를 업데이트
 		passwordQuery += " WHERE id = ?";
 		queryParams.push(userId);
 
@@ -383,8 +394,6 @@ app.post("/profile/:id/edit", isAuthenticated, upload.single("attachment"), asyn
 		res.status(500).send("Failed to update profile");
 	}
 });
-
-
 
 //전체 프로필 페이지를 위한 GET 라우트
 app.get("/profiles", async (req, res) => {
