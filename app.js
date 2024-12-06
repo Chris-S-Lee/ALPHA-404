@@ -18,7 +18,6 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 // JSON 및 URL-encoded 데이터 파싱 미들웨어를 추가합니다.
 app.use(express.json());
@@ -173,6 +172,7 @@ app.delete("/delete-account", async (req, res) => {
 	}
 });
 
+//페이지네이션
 app.get("/", async (req, res) => {
 	try {
 		const page = parseInt(req.query.page) || 1; // 페이지 번호, 기본값은 1
