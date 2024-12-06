@@ -13,12 +13,18 @@
 			<div class="news">
 				<% articles.forEach(article => { %>
 				<p>
-					<a href="/articles/<%= article.id %>"> <%= article.title %> <span id="when"><br> <%= article.createdAtFormatted %></span></a>
+					<a href="/articles/<%= article.id %>">
+						<%= article.title %>
+						<span id="when"
+							><br />
+							<%= article.createdAtFormatted %></span
+						></a
+					>
 				</p>
 				<% }) %>
 			</div>
 		</div>
-				<!-- 저작권 표시 -->
-				<p class="copyright">[저작권자 © KJD, 무단전재 및 재배포 금지]</p>
+		<!-- 저작권 표시 -->
+		<p class="copyright">[ⓒ 2024. KJD All rights reserved. 무단전재 및 재배포 금지]</p>
 	</body>
 </html>

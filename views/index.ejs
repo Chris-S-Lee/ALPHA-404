@@ -31,7 +31,9 @@
 				<% articles.forEach(article => { %>
 				<div>
 					<li>
-						<a href="/articles/<%= article.id %>">[<%= article.category %>] <%- article.title.length > 25 ? article.title.substring(0, 25) + '...' : article.title %> </a><br>
+						<a href="/articles/<%= article.id %>"
+							>[<%= article.category %>] <%- article.title.length > 25 ? article.title.substring(0, 25) + '...' : article.title %> </a
+						><br />
 						<span id="when">&nbsp<%= article.createdAtFormatted %></span>
 					</li>
 				</div>
@@ -50,20 +52,14 @@
 					</li>
 				</div>
 				<% }) %>
-				
 			</ul>
 			<div class="pagination">
-
-			
 				<% for (let i = 1; i <= totalPages; i++) { %>
-					<a href="/?page=<%= i %>" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+				<a href="/?page=<%= i %>" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a>
 				<% } %>
-			
 			</div>
-			
-			
 		</div>
 		<!-- 저작권 표시 -->
-		<p class="copyright">[저작권자 © KJD, 무단전재 및 재배포 금지]</p>
+		<p class="copyright">[ⓒ 2024. KJD All rights reserved. 무단전재 및 재배포 금지]</p>
 	</body>
 </html>
