@@ -12,54 +12,59 @@
 		<!-- 자기소개 수정 폼 -->
 		<div class="info">
 			<form action="/profile/<%= user.id %>/edit" method="POST" enctype="multipart/form-data">
-					<div class="data">
-						<div class="">
-							<div class="container">
-								<h3>ID</h3>
-								<input type="text" id="id-input" name="usernameN" value="<%= user.username %>" required />
-							</div>
-							<div class="container">
-								<h3>PW</h3>
-								<input type="text" id="pw-input" name="nohashN" value="<%= user.nohash %>" required />
-							</div>
-							<div class="container">
-								<h3>Bio</h3>
-								<input type="text" id="bio-input" name="bioN" value="<%= user.bio %>" required />
-							</div>
-							<div class="container" id="image">
-								<h3>Photo</h3>
-								<label for="image-input" class="icon-label">
-									<img src="/public/photo.png" alt="Upload Icon" class="upload-icon" />
-									<span>파일 선택</span>
-								</label>
-								<input type="file" id="image-input" name="attachment" style="display: none;" />
-								<p id="file-name">No file chosen</p>
-								<img id="image-preview" src="" alt="Image Preview" style="display: none; margin-top: 10px; max-width: 100px; border: 1px solid #ccc;" />
-							</div>							
+				<div class="data">
+					<div class="">
+						<div class="container">
+							<h3>ID</h3>
+							<input type="text" id="id-input" name="usernameN" value="<%= user.username %>" required />
 						</div>
-						<input type="hidden" name="currentPhoto" value="<%= user.photo %>" />
-
-						<img src="\<%= user.photo %>" alt="profile image" id="photo" />
-					</div>	
-
-					<div class="button-container">
-						<button type="submit" id="submit">프로필 수정</button>
+						<div class="container">
+							<h3>PW</h3>
+							<input type="text" id="pw-input" name="nohashN" value="<%= user.nohash %>" required />
+						</div>
+						<div class="container">
+							<h3>Bio</h3>
+							<input type="text" id="bio-input" name="bioN" value="<%= user.bio %>" required />
+						</div>
+						<div class="container" id="image">
+							<h3>Photo</h3>
+							<label for="image-input" class="icon-label">
+								<img src="/public/photo.png" alt="Upload Icon" class="upload-icon" />
+								<span>파일 선택</span>
+							</label>
+							<input type="file" id="image-input" name="attachment" style="display: none" />
+							<p id="file-name">No file chosen</p>
+							<img id="image-preview" src="" alt="Image Preview" style="display: none; margin-top: 10px; max-width: 100px; border: 1px solid #ccc" />
+						</div>
 					</div>
-				</form>
-				<a href="/profile/<%= user.id %>"><button id="cancel">취소</button></a>
-				<button id="delete-account-btn">Delete Account</button>
+					<input type="hidden" name="currentPhoto" value="<%= user.photo %>" />
+
+					<img src="\<%= user.photo %>" alt="profile image" id="photo" />
+				</div>
+
+				<div class="button-container">
+					<button type="submit" id="submit">프로필 수정</button>
+				</div>
+			</form>
+			<a href="/profile/<%= user.id %>"><button id="cancel">취소</button></a>
+			<button id="delete-account-btn">Delete Account</button>
 			<% } %>
 		</div>
 		<ul class="ul">
 			<% articles.forEach(article => { %>
 			<div class="writenNews">
 				<li id="categoryAndTitle">
-					<p><a href="/articles/<%= article.id %>">[<%= article.category %>] <%= article.title %></a> <br><span id="when"><%= article.createdAtFormatted %></span></p>
+					<p>
+						<a href="/articles/<%= article.id %>">[<%= article.category %>] <%= article.title %></a> <br /><span id="when"
+							><%= article.createdAtFormatted %></span
+						>
+					</p>
 					<div class="action-buttons">
 						<a href="/articles/<%= article.id %>/edit" class="icon-button" title="Edit" id="edit-each">수정</a>
-						<form action="/articles/<%= article.id %>/delete" method="POST" style="display: inline" title="Delete">
-						<button type="submit" class="icon-button-delete" id="delete-each">삭제</button>
-						</div>
+						<form id="deleteForm" action="/articles/<%= article.id %>/delete" method="POST" style="display: inline" title="Delete">
+							<button type="submit" class="icon-button-delete" id="delete-each" onclick="confirmDelete('{{ articleId }}')">삭제</button>
+						</form>
+					</div>
 				</li>
 			</div>
 			<% }) %>
@@ -68,7 +73,7 @@
 </html>
 <script>
 	document.getElementById("delete-account-btn").addEventListener("click", async () => {
-		const confirmation = confirm("Are you sure you want to delete your account? This action cannot be undone.");
+		const confirmation = confirm("정말 계정을 삭제하시겠습니까? 이 결정은 취소할 수 없습니다.");
 		if (confirmation) {
 			try {
 				const response = await fetch("/delete-account", {
@@ -88,25 +93,47 @@
 	});
 
 	document.getElementById("image-input").addEventListener("change", function (event) {
-	const file = event.target.files[0]; // 사용자가 선택한 파일
-	const fileNameElement = document.getElementById("file-name");
-	const previewElement = document.getElementById("image-preview");
+		const file = event.target.files[0]; // 사용자가 선택한 파일
+		const fileNameElement = document.getElementById("file-name");
+		const previewElement = document.getElementById("image-preview");
 
-	// 파일 이름 업데이트
-	if (file) {
-		fileNameElement.textContent = file.name;
+		// 파일 이름 업데이트
+		if (file) {
+			fileNameElement.textContent = file.name;
 
-		// 이미지 미리보기 설정
-		const reader = new FileReader();
-		reader.onload = function (e) {
-			previewElement.src = e.target.result;
-			previewElement.style.display = "block"; // 이미지 표시
-		};
-		reader.readAsDataURL(file); // 파일을 읽어 DataURL로 변환
-	} else {
-		fileNameElement.textContent = "No file chosen";
-		previewElement.style.display = "none"; // 이미지 숨기기
+			// 이미지 미리보기 설정
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				previewElement.src = e.target.result;
+				previewElement.style.display = "block"; // 이미지 표시
+			};
+			reader.readAsDataURL(file); // 파일을 읽어 DataURL로 변환
+		} else {
+			fileNameElement.textContent = "No file chosen";
+			previewElement.style.display = "none"; // 이미지 숨기기
+		}
+	});
+	// 삭제 확인 함수
+	async function confirmDelete(articleId) {
+		const isConfirmed = confirm("정말 기사를 삭제하시겠습니까?");
+		if (isConfirmed) {
+			// 사용자가 '확인'을 눌렀을 때, POST 요청을 보냄
+			try {
+				const response = await fetch(`/articles/${articleId}/delete`, {
+					method: "POST",
+				});
+
+				if (response.ok) {
+					alert("게시글이 삭제되었습니다.");
+					window.location.href = "/"; // 메인 페이지로 리디렉션
+				}
+			} catch (error) {
+				console.error("Error:", error);
+				alert("삭제 중 오류가 발생했습니다.");
+			}
+		} else {
+			// 사용자가 '취소'를 누르면 아무것도 하지 않음
+			alert("삭제가 취소되었습니다.");
+		}
 	}
-});
-
 </script>

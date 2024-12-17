@@ -33,8 +33,8 @@
 						<a href="/articles/<%= article.id %>/edit" class="icon-button" title="Edit">
 							<i class="fas fa-edit"></i>
 						</a>
-						<form action="/articles/<%= article.id %>/delete" method="POST" style="display: inline" title="Delete">
-							<button type="submit" class="icon-button-delete">
+						<form id="deleteForm" action="/articles/<%= article.id %>/delete" method="POST" style="display: inline" title="Delete">
+							<button type="submit" class="icon-button-delete" onclick="confirmDelete('{{ articleId }}')">
 								<i class="fas fa-trash-alt"></i>
 							</button>
 						</form>
@@ -73,6 +73,29 @@
 					.catch((err) => {
 						console.error("Could not copy link: ", err);
 					});
+			}
+			// 삭제 확인 함수
+			async function confirmDelete(articleId) {
+				const isConfirmed = confirm("정말 기사를 삭제하시겠습니까?");
+				if (isConfirmed) {
+					// 사용자가 '확인'을 눌렀을 때, POST 요청을 보냄
+					try {
+						const response = await fetch(`/articles/${articleId}/delete`, {
+							method: "POST",
+						});
+
+						if (response.ok) {
+							alert("게시글이 삭제되었습니다.");
+							window.location.href = "/"; // 메인 페이지로 리디렉션
+						}
+					} catch (error) {
+						console.error("Error:", error);
+						alert("삭제 중 오류가 발생했습니다.");
+					}
+				} else {
+					// 사용자가 '취소'를 누르면 아무것도 하지 않음
+					alert("삭제가 취소되었습니다.");
+				}
 			}
 		</script>
 	</body>

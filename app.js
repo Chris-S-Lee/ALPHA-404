@@ -188,9 +188,8 @@ app.delete("/delete-account", async (req, res) => {
 			if (err) {
 				console.error("Error destroying session:", err);
 			}
-			console.log("계정 삭제 성공");
 			res.status(200).json({
-				message: "Account deleted and logged out successfully.",
+				message: "계정이 성공적으로 삭제되었습니다.",
 				redirectUrl: "/", // 리다이렉트할 URL
 			});
 		});
