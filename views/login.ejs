@@ -10,17 +10,16 @@
 		<a href="/"><img src="/public/logo.png" alt="Logo" class="kjdlogo" /></a>
 
 		<div class="wrapper">
-			<!-- action 속성에 로그인 POST 요청 경로 지정 -->
+			<!-- action 속성 제거, 대신 JavaScript로 폼 처리 -->
 			<form id="loginForm" method="POST">
 				<h1>로그인</h1>
 
 				<div class="input-box">
-					<!-- name 속성을 추가하여 서버가 입력 데이터를 받도록 설정 -->
-					<input type="text" name="username" placeholder="이름" required />
+					<input type="text" id="username" name="username" placeholder="이름" required />
 				</div>
 
 				<div class="input-box">
-					<input type="password" name="password" placeholder="비밀번호" required />
+					<input type="password" id="password" name="password" placeholder="비밀번호" required />
 				</div>
 
 				<button type="submit" class="btn">로그인</button>
@@ -30,9 +29,42 @@
 				</div>
 			</form>
 		</div>
+
 		<div class="logo">
 			<p id="madeby">Made By</p>
 			<p id="notfound">404.Not Found</p>
 		</div>
+
+		<!-- JavaScript 추가 -->
+		<script>
+			document.getElementById("loginForm").addEventListener("submit", async function (event) {
+				event.preventDefault(); // 폼의 기본 제출 동작 막기
+
+				// 입력된 값 가져오기
+				const username = document.getElementById("username").value;
+				const password = document.getElementById("password").value;
+
+				try {
+					// 서버로 POST 요청 보내기
+					const response = await fetch("/login", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ username, password }),
+					});
+
+					if (!response.ok) {
+						// 서버가 401을 반환한 경우 경고창 띄우기
+						alert("잘못된 이름 혹은 비밀번호입니다.");
+						return;
+					}
+
+					// 로그인 성공 시 다른 페이지로 이동 (예: 홈 화면)
+					window.location.href = "/";
+				} catch (error) {
+					console.error("Error:", error);
+					alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+				}
+			});
+		</script>
 	</body>
 </html>

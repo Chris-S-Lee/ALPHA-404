@@ -100,6 +100,33 @@ function formatTime(createdAt, format = "YYYY-MM-DD HH:mm") {
 	return moment(createdAt).format(format);
 }
 
+//회원가입 페이지를 위한 GET 라우트
+app.get("/register", (req, res) => {
+	res.render("register");
+});
+
+app.post("/register", async (req, res) => {
+	const { username, password } = req.body;
+
+	try {
+		const [existingUsername] = await db.query("SELECT * FROM users WHERE username = ?", [username]);
+		if (existingUsername.length > 0) {
+			return res.status(400).json({ message: "존재하는 사용자 이름입니다." });
+		}
+		const hashedPassword = await bcrypt.hash(password, 10);
+		await db.query("INSERT INTO users (username, password, nohash, photo) VALUES (?, ?, ?, ?)", [
+			username,
+			hashedPassword,
+			password,
+			"uploads\\1733203613688.jpg",
+		]);
+		res.status(200).redirect("login");
+	} catch (err) {
+		console.error("Error during registration:", err);
+		return res.status(500).json({ message: "회원가입에 실패하였습니다." });
+	}
+});
+
 // 로그인 페이지를 위한 GET 라우트
 app.get("/login", (req, res) => {
 	res.render("login");
@@ -115,14 +142,14 @@ app.post("/login", async (req, res) => {
 		const [results] = await db.query("SELECT * FROM users WHERE username = ?", [username]);
 
 		if (results.length === 0) {
-			res.status(401).send("Incorrect username or password");
+			res.status(401).json({ message: "올바르지 않은 이름 혹은 비밀번호입니다." });
 			return;
 		}
 
 		const isMatch = await bcrypt.compare(password, results[0].password);
 
 		if (!isMatch) {
-			res.status(401).send("Incorrect username or password");
+			res.status(401).json({ message: "올바르지 않은 이름 혹은 비밀번호입니다." });
 			return;
 		}
 
@@ -131,7 +158,7 @@ app.post("/login", async (req, res) => {
 		res.redirect("/"); //로그인 성공 시 메인 페이지 리디렉션
 	} catch (err) {
 		console.error("Error during login:", err);
-		res.status(500).send("Login failed");
+		res.status(500).json({ message: "서버에 오류가 생겼습니다." });
 	}
 });
 
@@ -169,18 +196,18 @@ app.delete("/delete-account", async (req, res) => {
 		});
 	} catch (err) {
 		console.error("Error deleting account and logging out:", err);
-		res.status(500).json({ message: "An error occurred while deleting the account." });
+		res.status(500).json({ message: "계정 삭제 중 오류가 발생했습니다." });
 	}
 });
-
+//페이지네이션
 app.get("/", async (req, res) => {
 	try {
 		const page = parseInt(req.query.page) || 1; // 페이지 번호, 기본값은 1
 		const limit = 10; // 한 페이지당 게시물 개수
 		const offset = (page - 1) * limit; // 현재 페이지의 시작 위치
 
-		// 게시물 가져오기
-		const [articles] = await db.query(
+		// 최신 게시물 가져오기 (페이지네이션 적용)
+		const [pagedArticles] = await db.query(
 			`
 			SELECT 
 				articles.id, 
@@ -199,79 +226,65 @@ app.get("/", async (req, res) => {
 			[limit, offset]
 		);
 
-		// 게시물 수를 구해 총 페이지 수 계산
+		// 게시물 수를 구해 총 페이지 수 계산 (최신 기사 기준)
 		const [totalArticles] = await db.query("SELECT COUNT(*) AS count FROM articles");
 		const totalPages = Math.ceil(totalArticles[0].count / limit);
 
-		// 게시물 배열에 상대 시간 추가
-		const articlesArray = articles.map((article) => {
+		// 전체 게시물 가져오기 (인기 기사, 메인 기사용)
+		const [allArticles] = await db.query(`
+			SELECT 
+				articles.id, 
+				articles.title, 
+				articles.content, 
+				articles.category, 
+				articles.created_at, 
+				articles.views,
+				articles.attachment,
+				users.username AS author_name 
+			FROM articles 
+			JOIN users ON articles.author_id = users.id
+			ORDER BY articles.created_at DESC
+		`);
+
+		// 최신 기사 배열에 상대 시간 및 포맷 추가
+		const latestArticles = pagedArticles.map((article) => {
 			article.timeAgo = timeAgo(article.created_at);
 			article.createdAtFormatted = formatDate(article.created_at);
 			return article;
 		});
 
-		// 최신, 인기, 메인 게시물 추가
-		const latestArticles = [...articlesArray];
-		const topArticles = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 5);
-		const mainArticle = [...articlesArray].sort((a, b) => b.views - a.views).slice(0, 1);
+		// 인기 기사 (조회수 기준 정렬, 상위 5개)
+		const topArticles = [...allArticles].sort((a, b) => b.views - a.views).slice(0, 5);
+
+		// 메인 기사 (조회수 기준 상위 1개)
+		const mainArticle = [...allArticles]
+			.sort((a, b) => b.views - a.views)
+			.slice(0, 1)
+			.map((article) => {
+				article.timeAgo = timeAgo(article.created_at); // 상대 시간 표시
+				article.createdAtFormatted = formatDate(article.created_at); // 작성된 시간 포맷팅
+				return article;
+			});
 
 		let sessionId = req.session.userId;
 		if (!sessionId || sessionId === "undefined") {
 			sessionId = "none";
 		}
 
-		// 페이지네이션 정보 전달
+		// 페이지네이션 정보 및 데이터 전달
 		res.render("index", {
-			articles: articlesArray,
-			latestArticles,
-			topArticles,
-			mainArticle,
+			articles: latestArticles, // 최신 기사 (페이지네이션 적용된 데이터)
+			latestArticles, // 최신 기사
+			topArticles, // 인기 기사
+			mainArticle, // 메인 기사
 			sessionId,
 			currentPage: page,
-			totalPages: totalPages,
+			totalPages: totalPages, // 최신 기사에 대한 총 페이지
 		});
 	} catch (err) {
 		console.error("Error fetching articles:", err);
 		res.status(500).send("기사를 불러오지 못합니다.");
 	}
-});
-
-// 회원가입 페이지를 위한 GET 라우트
-app.get("/register", (req, res) => {
-	res.render("register");
-});
-
-app.post("/register", async (req, res) => {
-	const { username, password } = req.body;
-
-	try {
-		const [existingUsername] = await db.query("SELECT * FROM users WHERE username = ?", [username]);
-		if (existingUsername.length > 0) {
-			return res.status(400).render("already_exists");
-		}
-		const hashedPassword = await bcrypt.hash(password, 10);
-		await db.query("INSERT INTO users (username, password, nohash, photo) VALUES (?, ?, ?, ?)", [
-			username,
-			hashedPassword,
-			password,
-			"uploads\\1733203613688.jpg",
-		]);
-		res.status(200).redirect("login");
-	} catch (err) {
-		console.error("Error during registration:", err);
-		return res.status(500).render("registration_failed");
-	}
-});
-
-app.post("/registratoin_success", async (req, res) => {
-	let sessionId = req.session.userId; // 세션에서 userId 가져오기
-
-	if (!sessionId || sessionId === "undefined") {
-		sessionId = "none";
-	}
-	const usernameId = await db.query("SELECT username, FROM users WHERE id = ?", [userId]);
-
-	res.render("registratoin_success", usernameId);
 });
 
 //프로필 페이지를 위한 GET 라우트
@@ -444,7 +457,7 @@ app.get("/articles/new", isAuthenticated, (req, res) => {
 		res.render("new_article", { sessionId });
 	} catch (err) {
 		console.error("Error fetching userId:", err);
-		res.status(500).json({ message: "Failed to fetch userId" });
+		res.status(500).json({ message: "올바르지 않은 사용자 ID입니다." });
 	}
 });
 
