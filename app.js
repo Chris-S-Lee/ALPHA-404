@@ -18,6 +18,7 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 // JSON 및 URL-encoded 데이터 파싱 미들웨어를 추가합니다.
 app.use(express.json());
@@ -171,7 +172,6 @@ app.delete("/delete-account", async (req, res) => {
 		res.status(500).json({ message: "An error occurred while deleting the account." });
 	}
 });
-
 //페이지네이션
 app.get("/", async (req, res) => {
 	try {
@@ -230,8 +230,14 @@ app.get("/", async (req, res) => {
 
 		// 메인 기사 (조회수 기준 상위 1개)
 		const mainArticle = [...allArticles]
-			.sort((a, b) => b.views - a.views)
-			.slice(0, 1);
+   			.sort((a, b) => b.views - a.views)
+    		.slice(0, 1)
+   	 		.map((article) => {
+        		article.timeAgo = timeAgo(article.created_at); // 상대 시간 표시
+        		article.createdAtFormatted = formatDate(article.created_at); // 작성된 시간 포맷팅
+        	return article;
+    	});
+
 
 		let sessionId = req.session.userId;
 		if (!sessionId || sessionId === "undefined") {
@@ -254,45 +260,6 @@ app.get("/", async (req, res) => {
 	}
 });
 
-
-
-// 회원가입 페이지를 위한 GET 라우트
-app.get("/register", (req, res) => {
-	res.render("register");
-});
-
-app.post("/register", async (req, res) => {
-	const { username, password } = req.body;
-
-	try {
-		const [existingUsername] = await db.query("SELECT * FROM users WHERE username = ?", [username]);
-		if (existingUsername.length > 0) {
-			return res.status(400).render("already_exists");
-		}
-		const hashedPassword = await bcrypt.hash(password, 10);
-		await db.query("INSERT INTO users (username, password, nohash, photo) VALUES (?, ?, ?, ?)", [
-			username,
-			hashedPassword,
-			password,
-			"uploads\\1733203613688.jpg",
-		]);
-		res.status(200).render("registration_success");
-	} catch (err) {
-		console.error("Error during registration:", err);
-		return res.status(500).render("registration_failed");
-	}
-});
-
-app.post("/registratoin_success", async (req, res) => {
-	let sessionId = req.session.userId; // 세션에서 userId 가져오기
-
-	if (!sessionId || sessionId === "undefined") {
-		sessionId = "none";
-	}
-	const usernameId = await db.query("SELECT username, FROM users WHERE id = ?", [userId]);
-
-	res.render("registratoin_success", usernameId);
-});
 
 //프로필 페이지를 위한 GET 라우트
 app.get("/profile/:id", async (req, res) => {
@@ -369,18 +336,28 @@ app.get("/profile/:id/edit", isAuthenticated, async (req, res) => {
 		res.status(500).json({ error: "Failed to fetch user data" });
 	}
 });
+
 // 프로필 수정을 처리하는 POST 라우트
 app.post("/profile/:id/edit", isAuthenticated, upload.single("attachment"), async (req, res) => {
 	const userId = req.params.id; // URL에서 사용자 ID 추출
 	const { usernameN, nohashN, bioN, currentPhoto } = req.body; // currentPhoto 추가
 	let filePath = req.file ? req.file.path : currentPhoto; // 파일이 없으면 기존 이미지 유지
 	const filePathN = filePath.replace(/\\+/g, "\\");
-	const profileImage = user.profileImage || '/public/profile.png';
-	res.render('profile', { user: { ...user, profileImage } });
-
 
 	try {
-		// 비밀번호를 변경할 경우에만 해시화하여 업데이트
+		// 데이터베이스에서 사용자 정보 가져오기
+		const [rows] = await db.query("SELECT * FROM users WHERE id = ?", [userId]);
+		const user = rows[0]; // 사용자 정보 가져오기
+
+		// 사용자 정보가 없는 경우 오류 처리
+		if (!user) {
+			return res.status(404).send("User not found");
+		}
+
+		// 프로필 이미지 처리
+		const profileImage = user.photo || "/public/profile.png";
+
+		// 사용자 정보를 업데이트
 		let passwordQuery = "UPDATE users SET username = ?, bio = ?, photo = ?";
 		let queryParams = [usernameN, bioN, filePathN];
 
@@ -392,7 +369,6 @@ app.post("/profile/:id/edit", isAuthenticated, upload.single("attachment"), asyn
 			queryParams.push(hashedPasswordN, nohashN); // 비밀번호와 평문 비밀번호 저장
 		}
 
-		// 사용자 정보를 업데이트
 		passwordQuery += " WHERE id = ?";
 		queryParams.push(userId);
 
@@ -405,8 +381,6 @@ app.post("/profile/:id/edit", isAuthenticated, upload.single("attachment"), asyn
 		res.status(500).send("Failed to update profile");
 	}
 });
-
-
 
 //전체 프로필 페이지를 위한 GET 라우트
 app.get("/profiles", async (req, res) => {
