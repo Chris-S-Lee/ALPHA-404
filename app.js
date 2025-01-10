@@ -13,9 +13,6 @@ const path = require("path");
 // Express 애플리케이션을 초기화합니다.
 const app = express();
 
-// 서버 포트 설정
-const PORT = 3000;
-
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
@@ -602,7 +599,7 @@ app.get("/articles/:id", async (req, res) => {
 });
 
 // 서버를 시작하고 설정된 포트에서 요청을 수신합니다.
-app.listen(PORT, () => {
+app.listen(8080, () => {
 	console.log(`Server running on http://localhost:${PORT}`);
 });
 
