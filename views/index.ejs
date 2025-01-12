@@ -32,7 +32,7 @@
 				<div>
 					<li>
 						<a href="/articles/<%= article.id %>"
-							>[<%= article.category %>] <%- article.title.length > 25 ? article.title.substring(0, 25) + '...' : article.title %> </a
+							>[<%= article.category %>] <%- article.title.length > 30 ? article.title.substring(0, 30) + '...' : article.title %> </a
 						><br />
 						<span id="when">&nbsp<%= article.createdAtFormatted %></span>
 					</li>
@@ -47,7 +47,7 @@
 					<li>
 						<div class="sub">
 							<div class="category"><%= article.category %></div>
-							<a href="/articles/<%= article.id %>"> <%- article.title.length > 20 ? article.title.substring(0, 20) + '...' : article.title %> </a>
+							<a href="/articles/<%= article.id %>"> <%- article.title.length > 17 ? article.title.substring(0, 17) + '...' : article.title %> </a>
 						</div>
 					</li>
 				</div>
